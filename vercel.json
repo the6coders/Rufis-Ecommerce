@@ -3,6 +3,10 @@
     {
       "source": "/api/:path*",
       "destination": "http://ecommerce.reworkstaging.name.ng/v2/:path*"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
     }
   ]
 }
