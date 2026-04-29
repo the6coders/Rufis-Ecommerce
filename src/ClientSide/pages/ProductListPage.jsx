@@ -1,14 +1,20 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { extractList, getProducts } from "../../api/services";
+import { DEFAULT_MERCHANT_ID, extractList, getProducts } from "../../api/services";
 import { FaArrowRightLong } from "react-icons/fa6";
 
 function ProductListPage() {
   const { categoryId } = useParams();
-  const merchantId = localStorage.getItem("merchant_id") || "";
+  const [merchantId, setMerchantId] = useState(localStorage.getItem("merchant_id") || DEFAULT_MERCHANT_ID);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const sliderRef = useRef(null);
+
+  useEffect(() => {
+    const currentMerchantId = localStorage.getItem("merchant_id") || DEFAULT_MERCHANT_ID;
+    localStorage.setItem("merchant_id", currentMerchantId);
+    setMerchantId(currentMerchantId);
+  }, []);
 
   useEffect(() => {
     if (!merchantId) {
@@ -29,7 +35,7 @@ function ProductListPage() {
     };
 
     loadProducts();
-  }, []);
+  }, [merchantId]);
 
   const filteredProducts = useMemo(() => {
     if (!categoryId) return products;

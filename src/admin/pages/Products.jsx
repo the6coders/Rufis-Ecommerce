@@ -1,9 +1,9 @@
 ﻿import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { deleteProduct, extractList, getProducts, updateProduct } from "../../api/services";
+import { DEFAULT_MERCHANT_ID, deleteProduct, extractList, getProducts, updateProduct } from "../../api/services";
 
 function Products() {
-    const [merchantId, setMerchantId] = useState(localStorage.getItem("merchant_id") || "");
+    const [merchantId, setMerchantId] = useState(localStorage.getItem("merchant_id") || DEFAULT_MERCHANT_ID);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -21,6 +21,12 @@ function Products() {
     const activeCategoryId = searchParams.get("category_id") || "";
     // length of total products in this category
     const [totalProducts, setTotalProducts] = useState(0);
+
+    useEffect(() => {
+        const currentMerchantId = localStorage.getItem("merchant_id") || DEFAULT_MERCHANT_ID;
+        localStorage.setItem("merchant_id", currentMerchantId);
+        setMerchantId(currentMerchantId);
+    }, []);
 
     const loadProducts = async (catId) => {
         if (!merchantId) {

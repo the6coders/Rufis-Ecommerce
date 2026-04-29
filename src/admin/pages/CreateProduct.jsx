@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   createProduct,
+  DEFAULT_MERCHANT_ID,
   extractList,
   getCategories,
 } from "../../api/services";
@@ -116,7 +117,7 @@ const compressImageForPayload = async (file, onProgress) => {
 };
 
 function CreateProduct() {
-  const [merchantId, setMerchantId] = useState(localStorage.getItem("merchant_id") || "");
+  const [merchantId, setMerchantId] = useState(localStorage.getItem("merchant_id") || DEFAULT_MERCHANT_ID);
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
   const [imageSource, setImageSource] = useState("url");
@@ -135,6 +136,12 @@ function CreateProduct() {
   const [processingImage, setProcessingImage] = useState(false);
   const [imageProgress, setImageProgress] = useState(0);
   const uploadPreviewUrlRef = useRef("");
+
+  useEffect(() => {
+    const currentMerchantId = localStorage.getItem("merchant_id") || DEFAULT_MERCHANT_ID;
+    localStorage.setItem("merchant_id", currentMerchantId);
+    setMerchantId(currentMerchantId);
+  }, []);
 
   useEffect(() => {
     const loadCategories = async () => {
