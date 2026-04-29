@@ -1,48 +1,23 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { createMerchant, DEFAULT_MERCHANT_ID, extractList, extractObject, getCategories } from "../../api/services";
+import { DEFAULT_MERCHANT_ID, extractList, getCategories } from "../../api/services";
 
 function Categories() {
     const [categories, setCategories] = useState([]);
     const [merchantId, setMerchantId] = useState(localStorage.getItem("merchant_id") || DEFAULT_MERCHANT_ID);
 
-    const buildDefaultMerchantPayload = () => {
-        const seed = Date.now();
-        return {
-            first_name: "Admin",
-            last_name: "Store",
-            email: `admin${seed}@flikpart.app`,
-            phone: `090${String(seed).slice(-7)}`,
-            store_name: "Flikpart Demo Store",
-            description: "Admin merchant account",
-            icon: "",
-            banner: "",
-            phones: [98767887, 98657654],
-            password: "123456",
-        };
-    };
+
 
     const resolveMerchantId = async () => {
-        const cachedMerchantId = localStorage.getItem("merchant_id") || "";
-        if (cachedMerchantId) {
-            setMerchantId(cachedMerchantId);
-            return cachedMerchantId;
-        }
-
-        const merchantRes = await createMerchant(buildDefaultMerchantPayload());
-        const merchantData = extractObject(merchantRes.data);
-        const newMerchantId = String(merchantData.id || merchantData.merchant_id || merchantData._id || "");
-
-        if (!newMerchantId) return "";
-
-        localStorage.setItem("merchant_id", newMerchantId);
-        setMerchantId(newMerchantId);
-        return newMerchantId;
+        const cachedMerchantId = localStorage.getItem("merchant_id") || DEFAULT_MERCHANT_ID;
+        localStorage.setItem("merchant_id", cachedMerchantId);
+        setMerchantId(cachedMerchantId);
+        return cachedMerchantId;
     };
 
     useEffect(() => {
         const syncMerchantId = () => {
-            const current = localStorage.getItem("merchant_id") || "";
+            const current = localStorage.getItem("merchant_id") || DEFAULT_MERCHANT_ID;
             setMerchantId((prev) => (prev === current ? prev : current));
         };
 
