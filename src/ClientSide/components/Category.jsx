@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { createMerchant, extractList, extractObject, getCategories } from "../../api/services";
+import { createMerchant, DEFAULT_MERCHANT_ID, extractList, extractObject, getCategories } from "../../api/services";
 
 function Categories() {
     const [categories, setCategories] = useState([]);
-    const [merchantId, setMerchantId] = useState(localStorage.getItem("merchant_id") || "");
+    const [merchantId, setMerchantId] = useState(localStorage.getItem("merchant_id") || DEFAULT_MERCHANT_ID);
 
     const buildDefaultMerchantPayload = () => {
         const seed = Date.now();

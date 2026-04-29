@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const BASE_URL = "http://ecommerce.reworkstaging.name.ng/v2";
+export const DEFAULT_MERCHANT_ID = "69e6b6e31595cbe810463ef4";
 
 const api = axios.create({
   baseURL: BASE_URL,

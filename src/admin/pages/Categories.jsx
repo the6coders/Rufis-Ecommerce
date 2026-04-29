@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { createMerchant, deleteCategory, extractList, extractObject, getCategories } from "../../api/services";
+import { createMerchant, DEFAULT_MERCHANT_ID, deleteCategory, extractList, extractObject, getCategories } from "../../api/services";
 
 
 function Categories() {
-  const [merchantId, setMerchantId] = useState(localStorage.getItem("merchant_id") || "");
+  const [merchantId, setMerchantId] = useState(localStorage.getItem("merchant_id") || DEFAULT_MERCHANT_ID);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");

@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { createCategory } from "../../api/services";
+import { createCategory, DEFAULT_MERCHANT_ID } from "../../api/services";
 // import { createCategory, extractList, getCategories } from "../../api/services";
 
 
 function CreateCategory() {
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
-  const [merchantId, setMerchantId] = useState(localStorage.getItem("merchant_id") || "");
+  const [merchantId, setMerchantId] = useState(localStorage.getItem("merchant_id") || DEFAULT_MERCHANT_ID);
 
   const [status, setStatus] = useState("");
   const [submitting, setSubmitting] = useState(false);
