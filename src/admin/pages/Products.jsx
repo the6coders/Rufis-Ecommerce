@@ -125,7 +125,15 @@ function Products() {
 
         try {
             await updateProduct(productId, payload);
-            await loadProducts(activeCategoryId);
+            // Optimistically update local state so price shows correctly
+            // even if the API GET returns stale data
+            setProducts((prev) =>
+                prev.map((p) => {
+                    const pId = p.id || p.product_id || p._id;
+                    if (String(pId) !== String(productId)) return p;
+                    return { ...p, ...payload };
+                })
+            );
             cancelEdit();
         } catch (err) {
             const apiMessage =
