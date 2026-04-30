@@ -165,7 +165,7 @@ function ProductListPage() {
           </Link>
         </div>
 
-        <div className="grid grid-rows-2 grid-cols-3 gap-5 w-max">
+        <div className="grid grid-rows-2 grid-cols-3 gap-5 overflow-x-auto pr-2 w-max">
           {filteredProducts.slice(0, 9).map((product, index) => {
             const productId = String(product.id || product.product_id || product._id || index);
             return (

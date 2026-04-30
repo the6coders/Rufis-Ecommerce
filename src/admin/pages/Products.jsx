@@ -22,9 +22,15 @@ function Products() {
     // length of total products in this category
     const [totalProducts, setTotalProducts] = useState(0);
 
+    const parseNonNegativeNumber = (value) => {
+        const cleaned = String(value ?? "").replace(/[^0-9.-]/g, "");
+        const parsed = Number(cleaned);
+        return Number.isNaN(parsed) || parsed < 0 ? 0 : parsed;
+    };
+
     const formatPrice = (value) => {
-        const numeric = Number(value);
-        if (!Number.isFinite(numeric)) return "No price";
+        const numeric = parseNonNegativeNumber(value);
+        if (numeric <= 0) return "No price";
         return `NGN ${numeric.toLocaleString()}`;
     };
 
@@ -73,12 +79,12 @@ function Products() {
 
     const startEdit = (product) => {
         const id = product.id || product.product_id || product._id;
-        const numericPrice = Number(product.price);
+        const numericPrice = parseNonNegativeNumber(product.price);
         setEditingId(String(id));
         setEditForm({
             title: product.title || "",
             description: product.descp || "",
-            price: Number.isFinite(numericPrice) ? String(numericPrice) : "",
+            price: numericPrice > 0 ? String(numericPrice) : "",
             quantity: String(product.quantity ?? ""),
             brand: product.brand || "",
         });
@@ -93,10 +99,8 @@ function Products() {
         const productId = product.id || product.product_id || product._id;
         if (!productId) return;
 
-        const parsedPrice = Number(editForm.price);
-        const parsedQty = Number(editForm.quantity);
-        const price = Number.isFinite(parsedPrice) && parsedPrice >= 0 ? parsedPrice : 0;
-        const quantity = Number.isFinite(parsedQty) && parsedQty >= 0 ? parsedQty : 0;
+        const price = parseNonNegativeNumber(editForm.price);
+        const quantity = parseNonNegativeNumber(editForm.quantity);
 
         const resolvedCategoryId =
             product.category_id ||
@@ -254,7 +258,8 @@ function Products() {
                                                     value={editForm.price}
                                                     onChange={(e) => setEditForm((prev) => ({ ...prev, price: e.target.value }))}
                                                     placeholder="Price"
-                                                    type="number"
+                                                    type="text"
+                                                    inputMode="decimal"
                                                 />
                                                 <input
                                                     className="border rounded px-3 py-2"
