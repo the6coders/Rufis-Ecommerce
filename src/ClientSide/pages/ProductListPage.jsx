@@ -165,20 +165,20 @@ function ProductListPage() {
           </Link>
         </div>
 
-        <div className="grid grid-rows-2 grid-cols-3 gap-5 overflow-x-auto pr-2 w-max">
+        <div className="grid grid-rows-2 grid-cols-3 gap-4 overflow-x-auto pr-2 w-max">
           {filteredProducts.slice(0, 9).map((product, index) => {
             const productId = String(product.id || product.product_id || product._id || index);
             return (
               <Link key={productId} to={`/products/${productId}`}>
-                <div className="flex flex-col items-start w-26 rounded-md shadow pb-1 hover:shadow-md transition-shadow">
+                <div className="flex flex-col items-center w-24 rounded-md shadow pb-1 hover:shadow-md transition-shadow">
                   {product.images && product.images.length > 0 ? (
                     <img
                       src={product.images[0]}
                       alt={product.title || "Product"}
-                      className="w-28 h-28 object-cover rounded-md"
+                      className="w-24 h-24 object-cover rounded-md"
                     />
                   ) : (
-                    <div className="w-28 h-28 bg-gray-200 rounded-md" />
+                    <div className="w-24 h-24 bg-gray-200 rounded-md" />
                   )}
                   <p className="text-xs text-left pl-2 mt-1 line-clamp-2 leading-normal text-gray-700 w-full">
                     {product.title || "Untitled"}
