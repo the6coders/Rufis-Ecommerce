@@ -7,7 +7,7 @@ import { CiSearch } from "react-icons/ci";
 function ClientNavbar() {
 
   return (
-    <header className="bg-white border-b sticky top-0 z-20 bg-linear-to-b from-blue-300 to-white">
+    <header className="bg-white sticky top-0 z-10 bg-linear-to-b from-blue-300 to-white">
       <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-5  justify-between">
 
         <div className="flex items-center justify-center gap-10 ">
@@ -30,7 +30,7 @@ function ClientNavbar() {
         </nav>
 
         <section>
-          <div className="rounded-2xl border-blue-500 border-3 bg-white outline-0 p-5 flex items-center gap-2">
+          <div className="rounded-2xl border-blue-500 border-1 bg-white outline-0 px-5 py-2 flex items-center gap-2">
             <CiSearch className="text-blue-600 font-bold text-2xl" />
             <input type="text" placeholder="Search for Products" className="flex-1 outline-none" />
           </div>

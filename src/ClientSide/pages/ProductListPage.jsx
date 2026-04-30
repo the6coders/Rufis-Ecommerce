@@ -165,44 +165,56 @@ function ProductListPage() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-3 gap-4 px-5 overflow-x-auto w-max">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {filteredProducts.slice(0, 9).map((product, index) => {
             const productId = String(product.id || product.product_id || product._id || index);
+
             return (
               <Link key={productId} to={`/products/${productId}`}>
-                <div className="flex flex-col items-center w-24 rounded-md shadow pb-1 hover:shadow-md transition-shadow">
+                <div className="flex flex-col rounded-lg shadow-sm p-2 hover:shadow-md transition-shadow bg-white">
+
+                  {/* Image */}
                   {product.images && product.images.length > 0 ? (
                     <img
                       src={product.images[0]}
                       alt={product.title || "Product"}
-                      className="w-21 h-21 object-cover rounded-md"
+                      className="w-full h-32 sm:h-36 md:h-40 object-cover rounded-md"
                     />
                   ) : (
-                    <div className="w-21 h-21 bg-gray-200 rounded-md" />
+                    <div className="w-full h-32 sm:h-36 md:h-40 bg-gray-200 rounded-md" />
                   )}
-                  <p className="text-xs text-left pl-2 mt-1 line-clamp-2 leading-normal text-gray-700 w-full">
+
+                  {/* Title */}
+                  <p className="text-xs sm:text-sm mt-2 line-clamp-2 text-gray-700">
                     {product.title || "Untitled"}
                   </p>
-                  <p className="text-xs text-left pl-2 font-bold mt-1 line-clamp-2 leading-normal text-gray-700 w-full">
+
+                  {/* Price */}
+                  <p className="text-sm font-bold mt-1 text-gray-900">
                     {formatPrice(product.price)}
                   </p>
-                  <p className="text-xs text-left pl-2 font-bold mt-1 line-clamp-2 leading-normal text-green-600 w-full">
+
+                  {/* Tag */}
+                  <p className="text-xs font-semibold mt-1 text-green-600">
                     Hot Deal
                   </p>
+
                 </div>
               </Link>
             );
           })}
 
-          {!loading && filteredProducts.length === 0 ? (
-            <div className="bg-white rounded-lg shadow p-4 text-gray-500">No products found.</div>
-          ) : null}
+          {!loading && filteredProducts.length === 0 && (
+            <div className="col-span-full bg-white rounded-lg shadow p-4 text-gray-500 text-center">
+              No products found.
+            </div>
+          )}
         </div>
+
+
       </div>
-
-
     </div>
   );
 }
 
-export default ProductListPage;
+      export default ProductListPage;

@@ -13,8 +13,8 @@ const navItems = [
 
 function Footer() {
     return (
-        <footer className="fixed bottom-0 left-0 right-0 border-t border-gray-200 bg-white/95 backdrop-blur supports-backdrop-filter:bg-white/85 z-50">
-            <nav className="mx-auto grid h-[calc(4rem+env(safe-area-inset-bottom))] max-w-3xl grid-cols-4 items-center px-1 pb-[env(safe-area-inset-bottom)]">
+        <footer className="fixed bottom-0 left-0 right-0 border-t border-gray-300 bg-white/95 backdrop-blur supports-backdrop-filter:bg-white/85 z-20">
+            <nav className="mx-auto grid h-[calc(4rem+env(safe-area-inset-bottom))] max-w-2xl grid-cols-4 items-center px-1 pb-[env(safe-area-inset-bottom)]">
                 {navItems.map(({ name, icon: Icon, link }) => (
                     <NavLink
                         key={name}
