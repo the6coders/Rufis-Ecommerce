@@ -10,9 +10,15 @@ function ProductListPage() {
   const [loading, setLoading] = useState(false);
   const sliderRef = useRef(null);
 
+  const parseNonNegativeNumber = (value) => {
+    const cleaned = String(value ?? "").replace(/[^0-9.-]/g, "");
+    const parsed = Number(cleaned);
+    return Number.isNaN(parsed) || parsed < 0 ? 0 : parsed;
+  };
+
   const formatPrice = (value) => {
-    const numeric = Number(value);
-    if (!Number.isFinite(numeric) || numeric < 0) return "No price";
+    const numeric = parseNonNegativeNumber(value);
+    if (numeric <= 0) return "No price";
     return `₦ ${numeric.toLocaleString()}`;
   };
 

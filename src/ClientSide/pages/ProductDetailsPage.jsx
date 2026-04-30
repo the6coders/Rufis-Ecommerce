@@ -13,6 +13,12 @@ function ProductDetailsPage() {
   const [addingToCart, setAddingToCart] = useState(false);
   const [status, setStatus] = useState("");
 
+  const parseNonNegativeNumber = (value) => {
+    const cleaned = String(value ?? "").replace(/[^0-9.-]/g, "");
+    const parsed = Number(cleaned);
+    return Number.isNaN(parsed) || parsed < 0 ? 0 : parsed;
+  };
+
   useEffect(() => {
     if (!productId) return;
 
@@ -45,8 +51,8 @@ function ProductDetailsPage() {
     return product.image ? [product.image] : [];
   }, [product]);
 
-  const priceNumber = Number(product?.price);
-  const hasValidPrice = Number.isFinite(priceNumber) && priceNumber > 0;
+  const priceNumber = parseNonNegativeNumber(product?.price);
+  const hasValidPrice = priceNumber > 0;
   const priceValue = hasValidPrice ? `₦ ${priceNumber.toLocaleString()}` : "No price";
   const fakeOldPrice = hasValidPrice ? Math.round(priceNumber * 1.15) : 0;
   const maxQty = Math.max(1, Number(product?.quantity || 1));
