@@ -165,7 +165,7 @@ function ProductListPage() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {filteredProducts.slice(0, 9).map((product, index) => {
             const productId = String(product.id || product.product_id || product._id || index);
 
@@ -197,6 +197,124 @@ function ProductListPage() {
                   {/* Tag */}
                   <p className="text-xs font-semibold mt-1 text-green-600">
                     Hot Deal
+                  </p>
+
+                </div>
+              </Link>
+            );
+          })}
+
+          {!loading && filteredProducts.length === 0 && (
+            <div className="col-span-full bg-white rounded-lg shadow p-4 text-gray-500 text-center">
+              No products found.
+            </div>
+          )}
+        </div>
+
+
+      </div>
+
+
+      {/* section 5 */}
+      <div className="bg-white py-5 rounded-md mt-1">
+        {/* New Arrivals — horizontal list style */}
+        <div className="flex items-center justify-between mb-4 px-3">
+          <p className="text-lg font-semibold">New Arrivals</p>
+          <Link to="/products" aria-label="View more products" className="text-blue-600 text-sm font-medium hover:underline">
+            See all
+          </Link>
+        </div>
+
+        <div className="flex flex-col divide-y divide-gray-100 px-3">
+          {filteredProducts.slice(0, 6).map((product, index) => {
+            const productId = String(product.id || product.product_id || product._id || index);
+            const imageSrc = product.images?.[0] || product.image || null;
+            return (
+              <Link key={productId} to={`/products/${productId}`} className="flex items-center gap-4 py-3 hover:bg-gray-50 rounded-lg transition-colors px-2">
+                {/* Thumbnail */}
+                <div className="shrink-0 w-16 h-16 rounded-lg overflow-hidden bg-gray-100">
+                  {imageSrc ? (
+                    <img src={imageSrc} alt={product.title || "Product"} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full bg-gray-200" />
+                  )}
+                </div>
+
+                {/* Details */}
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900 line-clamp-1">{product.title || "Untitled"}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">{product.brand || "Generic"}</p>
+                  <p className="text-sm font-bold text-orange-600 mt-1">{formatPrice(product.price)}</p>
+                </div>
+
+                {/* Badge */}
+                <span className="shrink-0 text-xs bg-blue-50 text-blue-600 font-semibold px-2 py-1 rounded-full">New</span>
+              </Link>
+            );
+          })}
+
+          {!loading && filteredProducts.length === 0 && (
+            <p className="text-gray-500 text-sm py-4 text-center">No products found.</p>
+          )}
+        </div>
+      </div>
+
+
+      {/* section 4 */}
+      <div className="bg-gray-50 py-5 rounded-md scrollbar-hide mt-1">
+        {/* You May Also Like */}
+        <div className="flex items-center justify-between mb-4 px-3">
+          <p className="text-lg font-semibold">You May Also Like</p>
+          <Link to="/products" aria-label="View more products" className="bg-blue-600 text-white text-xl rounded-full py-1 px-4 inline-flex items-center justify-center">
+            <FaArrowRightLong />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          {filteredProducts.slice(0, 9).map((product, index) => {
+            const productId = String(product.id || product.product_id || product._id || index);
+            const price = parseNonNegativeNumber(product.price);
+            const fakeOldPrice = price > 0 ? Math.round(price * 1.2) : 0;
+            const discountPct = fakeOldPrice > 0 ? Math.round(((fakeOldPrice - price) / fakeOldPrice) * 100) : 0;
+
+            return (
+              <Link key={productId} to={`/products/${productId}`}>
+                <div className="flex flex-col rounded-lg shadow-sm p-2 hover:shadow-md transition-shadow bg-white relative">
+
+                  {/* Discount badge */}
+                  {discountPct > 0 && (
+                    <span className="absolute top-3 left-3 z-10 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
+                      -{discountPct}%
+                    </span>
+                  )}
+
+                  {/* Image */}
+                  {product.images && product.images.length > 0 ? (
+                    <img
+                      src={product.images[0]}
+                      alt={product.title || "Product"}
+                      className="w-full h-32 sm:h-36 md:h-40 object-cover rounded-md"
+                    />
+                  ) : (
+                    <div className="w-full h-32 sm:h-36 md:h-40 bg-gray-200 rounded-md" />
+                  )}
+
+                  {/* Title */}
+                  <p className="text-xs sm:text-sm mt-2 line-clamp-2 text-gray-700">
+                    {product.title || "Untitled"}
+                  </p>
+
+                  {/* Price row */}
+                  <div className="flex items-baseline gap-1.5 mt-1 flex-wrap">
+                    <p className="text-sm font-bold text-gray-900">{formatPrice(product.price)}</p>
+                    {fakeOldPrice > 0 && (
+                      <p className="text-xs text-gray-400 line-through">₦ {fakeOldPrice.toLocaleString()}</p>
+                    )}
+                  </div>
+
+                  {/* Tag */}
+                  <p className="text-xs font-semibold mt-1 text-green-600">
+                    Best Seller
                   </p>
 
                 </div>
