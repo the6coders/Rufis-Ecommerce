@@ -106,7 +106,7 @@ function AllCategories() {
                 </div>
 
                 {/* 🔥 1:3 Layout */}
-                <div className="grid grid-cols-4 md:grid-cols-4 gap-2">
+                <div className="grid grid-cols-4 md:grid-cols-4 gap-1">
 
                     {/* Sidebar (1 span) */}
                     <aside className="col-span-1 bg-purple-100 rounded-lg shadow-sm p-2 h-screen overflow-y-auto md:sticky md:top-4">
@@ -165,7 +165,7 @@ function AllCategories() {
                     </aside>
 
                     {/* Products (3 span) */}
-                    <div className="col-span-3 bg-white h-screen overflow-y-auto rounded-lg p-4 min-w-0">
+                    <div className="col-span-3 bg-white h-screen overflow-y-auto rounded-lg p-2 min-w-0">
 
                         <div className="flex justify-between items-center mb-4">
                             <p className="text-base sm:text-lg font-semibold text-gray-900">
@@ -189,7 +189,7 @@ function AllCategories() {
                         )}
 
                         {/* Product Grid */}
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-1">
                             {products.map((product, index) => {
                                 const productId = String(
                                     product.id ||
