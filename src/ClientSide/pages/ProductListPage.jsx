@@ -10,6 +10,12 @@ function ProductListPage() {
   const [loading, setLoading] = useState(false);
   const sliderRef = useRef(null);
 
+  const formatPrice = (value) => {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric) || numeric < 0) return "No price";
+    return `₦ ${numeric.toLocaleString()}`;
+  };
+
   useEffect(() => {
     const currentMerchantId = localStorage.getItem("merchant_id") || DEFAULT_MERCHANT_ID;
     localStorage.setItem("merchant_id", currentMerchantId);
@@ -172,7 +178,7 @@ function ProductListPage() {
                     {product.title || "Untitled"}
                   </p>
                   <p className="text-xs text-left pl-2 font-bold mt-1 line-clamp-2 leading-normal text-gray-700 w-full">
-                    {product.price ? `₦ ${product.price}` : "No price"}
+                    {formatPrice(product.price)}
                   </p>
                   <p className="text-xs text-left pl-2 font-bold mt-1 line-clamp-2 leading-normal text-green-600 w-full">
                     Hot Deal

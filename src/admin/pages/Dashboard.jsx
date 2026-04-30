@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import {
-  createMerchant,
+  DEFAULT_MERCHANT_ID,
   extractList,
-  extractObject,
   getCart,
   getProducts,
   getUsers,
@@ -16,44 +15,11 @@ function Dashboard() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const buildDefaultMerchantPayload = () => {
-    const seed = Date.now();
-    return {
-      first_name: "Admin",
-      last_name: "Store",
-      email: `admin${seed}@flikpart.app`,
-      phone: `090${String(seed).slice(-7)}`,
-      store_name: "Flikpart Demo Store",
-      description: "Admin merchant account",
-      icon: "",
-      banner: "",
-      phones: [98767887, 98657654],
-      password: "123456",
-    };
-  };
-
   const resolveMerchantId = async () => {
-    const cachedMerchantId = localStorage.getItem("merchant_id");
-    if (cachedMerchantId) {
-      setMerchantId(cachedMerchantId);
-      return cachedMerchantId;
-    }
-
-    const merchantRes = await createMerchant(buildDefaultMerchantPayload());
-    const merchantData = extractObject(merchantRes.data);
-    const newMerchantId =
-      merchantData.id ||
-      merchantData.merchant_id ||
-      merchantData._id ||
-      "";
-
-    if (!newMerchantId) {
-      throw new Error("Could not resolve merchant id from merchant creation response.");
-    }
-
-    localStorage.setItem("merchant_id", String(newMerchantId));
-    setMerchantId(String(newMerchantId));
-    return String(newMerchantId);
+    const cachedMerchantId = localStorage.getItem("merchant_id") || DEFAULT_MERCHANT_ID;
+    localStorage.setItem("merchant_id", cachedMerchantId);
+    setMerchantId(cachedMerchantId);
+    return cachedMerchantId;
   };
 
   useEffect(() => {

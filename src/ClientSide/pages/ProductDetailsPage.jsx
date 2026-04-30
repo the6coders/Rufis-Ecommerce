@@ -45,10 +45,12 @@ function ProductDetailsPage() {
     return product.image ? [product.image] : [];
   }, [product]);
 
-  const priceValue = Number(product?.price || 0);
-  const fakeOldPrice = Math.round(priceValue * 1.15);
+  const priceNumber = Number(product?.price);
+  const hasValidPrice = Number.isFinite(priceNumber) && priceNumber > 0;
+  const priceValue = hasValidPrice ? `₦ ${priceNumber.toLocaleString()}` : "No price";
+  const fakeOldPrice = hasValidPrice ? Math.round(priceNumber * 1.15) : 0;
   const maxQty = Math.max(1, Number(product?.quantity || 1));
-  const discountPct = fakeOldPrice > 0 ? Math.max(1, Math.round(((fakeOldPrice - priceValue) / fakeOldPrice) * 100)) : 0;
+  const discountPct = fakeOldPrice > 0 ? Math.max(1, Math.round(((fakeOldPrice - priceNumber) / fakeOldPrice) * 100)) : 0;
 
   const handleAddToCart = async () => {
     const userId = localStorage.getItem("user_id") || localStorage.getItem("client_user_id") || "";
@@ -149,8 +151,8 @@ function ProductDetailsPage() {
 
             <div className="mt-4 p-3 rounded-lg bg-orange-50 border border-orange-100">
               <div className="flex items-baseline gap-3">
-                <p className="text-3xl font-bold text-gray-900">N {priceValue.toLocaleString()}</p>
-                {priceValue > 0 ? <p className="text-sm text-gray-400 line-through">N {fakeOldPrice.toLocaleString()}</p> : null}
+                <p className="text-3xl font-bold text-gray-900">{priceValue}</p>
+                {hasValidPrice ? <p className="text-sm text-gray-400 line-through">N {fakeOldPrice.toLocaleString()}</p> : null}
                 {discountPct > 0 ? <span className="text-xs bg-orange-600 text-white px-2 py-0.5 rounded">-{discountPct}%</span> : null}
               </div>
               <p className="text-xs text-gray-500 mt-1">Inclusive of VAT where applicable</p>

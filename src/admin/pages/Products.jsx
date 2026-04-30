@@ -22,6 +22,12 @@ function Products() {
     // length of total products in this category
     const [totalProducts, setTotalProducts] = useState(0);
 
+    const formatPrice = (value) => {
+        const numeric = Number(value);
+        if (!Number.isFinite(numeric)) return "No price";
+        return `NGN ${numeric.toLocaleString()}`;
+    };
+
     useEffect(() => {
         const currentMerchantId = localStorage.getItem("merchant_id") || DEFAULT_MERCHANT_ID;
         localStorage.setItem("merchant_id", currentMerchantId);
@@ -67,11 +73,12 @@ function Products() {
 
     const startEdit = (product) => {
         const id = product.id || product.product_id || product._id;
+        const numericPrice = Number(product.price);
         setEditingId(String(id));
         setEditForm({
             title: product.title || "",
             description: product.descp || "",
-            price: String(product.price ?? ""),
+            price: Number.isFinite(numericPrice) ? String(numericPrice) : "",
             quantity: String(product.quantity ?? ""),
             brand: product.brand || "",
         });
@@ -85,19 +92,49 @@ function Products() {
     const submitEdit = async (product) => {
         const productId = product.id || product.product_id || product._id;
         if (!productId) return;
+
+        const parsedPrice = Number(editForm.price);
+        const parsedQty = Number(editForm.quantity);
+        const price = Number.isFinite(parsedPrice) && parsedPrice >= 0 ? parsedPrice : 0;
+        const quantity = Number.isFinite(parsedQty) && parsedQty >= 0 ? parsedQty : 0;
+
+        const resolvedCategoryId =
+            product.category_id ||
+            product.categoryId ||
+            product.category?.id ||
+            product.category?._id ||
+            activeCategoryId ||
+            "";
+
+        const resolvedImages = Array.isArray(product.images)
+            ? product.images.filter(Boolean)
+            : product.image
+                ? [product.image]
+                : [];
+
+        const payload = {
+            title: (editForm.title || product.title || "").trim(),
+            descp: editForm.description ?? product.descp ?? "",
+            price,
+            quantity,
+            brand: (editForm.brand || product.brand || "Generic").trim(),
+            merchant_id: merchantId,
+            category_id: resolvedCategoryId,
+            images: resolvedImages,
+        };
+
         try {
-            await updateProduct(productId, {
-                ...product,
-                title: editForm.title,
-                descp: editForm.description,
-                price: Number(editForm.price || 0),
-                quantity: Number(editForm.quantity || 0),
-                brand: editForm.brand,
-            });
+            await updateProduct(productId, payload);
             await loadProducts(activeCategoryId);
             cancelEdit();
-        } catch {
-            setError("Product update failed. The API might not support update in this environment.");
+        } catch (err) {
+            const apiMessage =
+                err?.response?.data?.message ||
+                err?.response?.data?.error ||
+                (typeof err?.response?.data === "string" ? err.response.data : "") ||
+                err?.message ||
+                "Product update failed.";
+            setError(`Product update failed: ${apiMessage}`);
         }
     };
 
@@ -246,7 +283,7 @@ function Products() {
                                             <p className="text-xs text-gray-400 line-clamp-1 mt-0.5">{product.descp || ""}</p>
                                         </td>
                                         <td className="px-4 py-3 text-gray-600">{product.brand || "-"}</td>
-                                        <td className="px-4 py-3 text-gray-600">NGN {Number(product.price || 0).toLocaleString()}</td>
+                                        <td className="px-4 py-3 text-gray-600">{formatPrice(product.price)}</td>
                                         <td className="px-4 py-3 text-gray-600">{product.quantity ?? 0}</td>
                                         <td className="px-4 py-3">
                                             <div className="flex gap-2">
