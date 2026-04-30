@@ -15,6 +15,7 @@ import ProductListPage from "./ClientSide/pages/ProductListPage";
 import ProductDetailsPage from "./ClientSide/pages/ProductDetailsPage";
 import CartPage from "./ClientSide/pages/CartPage";
 import CheckoutPage from "./ClientSide/pages/CheckoutPage";
+import AllCategories from "./ClientSide/pages/AllCategories";
 
 function App() {
   return (
@@ -48,6 +49,11 @@ function App() {
               <ProductDetailsPage />
             </ClientLayout>
           }
+        />
+
+        <Route
+          path="/allcategories"
+          element={<AllCategories />}
         />
 
         <Route

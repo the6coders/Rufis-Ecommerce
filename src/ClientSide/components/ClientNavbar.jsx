@@ -7,7 +7,7 @@ import { CiSearch } from "react-icons/ci";
 function ClientNavbar() {
 
   return (
-    <header className="bg-white sticky top-0 z-10 bg-linear-to-b from-blue-300 to-white">
+    <header className="bg-white sticky top-0 z-50 bg-linear-to-b from-blue-300 to-white">
       <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-5  justify-between">
 
         <div className="flex items-center justify-center gap-10 ">

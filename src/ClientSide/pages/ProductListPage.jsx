@@ -171,7 +171,7 @@ function ProductListPage() {
 
             return (
               <Link key={productId} to={`/products/${productId}`}>
-                <div className="flex flex-col rounded-lg shadow-sm p-2 hover:shadow-md transition-shadow bg-white">
+                <div className="flex flex-col rounded-lg shadow-sm pb-2 hover:shadow-md transition-shadow bg-white">
 
                   {/* Image */}
                   {product.images && product.images.length > 0 ? (
