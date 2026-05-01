@@ -44,7 +44,19 @@ function AllCategories() {
             setLoadingCategories(true);
             try {
                 const response = await getCategories(merchantId);
-                const list = extractList(response.data);
+                let list = extractList(response.data);
+
+                if (list.length === 0 && merchantId !== DEFAULT_MERCHANT_ID) {
+                    const fallbackResponse = await getCategories(DEFAULT_MERCHANT_ID);
+                    const fallbackList = extractList(fallbackResponse.data);
+
+                    if (fallbackList.length > 0) {
+                        localStorage.setItem("merchant_id", DEFAULT_MERCHANT_ID);
+                        setMerchantId(DEFAULT_MERCHANT_ID);
+                        list = fallbackList;
+                    }
+                }
+
                 setCategories(list);
 
                 if (list.length > 0) {
@@ -106,10 +118,10 @@ function AllCategories() {
                 </div>
 
                 {/* 🔥 1:3 Layout */}
-                <div className="grid grid-cols-4 md:grid-cols-4 gap-1">
+                <div className="grid grid-cols-5 md:grid-cols-4 gap-1">
 
                     {/* Sidebar (1 span) */}
-                    <aside className="col-span-1 bg-purple-100 rounded-lg shadow-sm p-2 h-screen overflow-y-auto md:sticky md:top-4">
+                    <aside className="col-span-1 bg-purple-100 rounded-lg shadow-sm p-1 h-screen overflow-y-auto md:sticky md:top-4">
                         {loadingCategories && (
                             <p className="text-sm text-gray-500 px-2 py-3">
                                 Loading categories...
@@ -137,13 +149,13 @@ function AllCategories() {
                                         onClick={() =>
                                             setSelectedCategoryId(categoryId)
                                         }
-                                        className={`w-full flex flex-col items-center gap-3 px-2 py-2 rounded-md transition
+                                        className={`w-full flex flex-col items-center gap-1 py-1 rounded-md transition
                       ${isActive
                                                 ? "bg-blue-50 text-blue-600 font-medium"
                                                 : "hover:bg-gray-100 text-gray-700"
                                             }`}
                                     >
-                                        <div className="w-10 h-10 bg-gray-100 rounded-md overflow-hidden">
+                                        <div className="w-6 h-6 bg-gray-100 rounded-md overflow-hidden">
                                             {imageSrc ? (
                                                 <img
                                                     src={imageSrc}
@@ -155,7 +167,7 @@ function AllCategories() {
                                             )}
                                         </div>
 
-                                        <p className="text-sm truncate">
+                                        <p className="text-xs truncate">
                                             {cat.name || "Category"}
                                         </p>
                                     </button>
@@ -165,7 +177,7 @@ function AllCategories() {
                     </aside>
 
                     {/* Products (3 span) */}
-                    <div className="col-span-3 bg-white h-screen overflow-y-auto rounded-lg p-2 min-w-0">
+                    <div className="col-span-4 bg-white h-screen overflow-y-auto rounded-lg p-2 min-w-0">
 
                         <div className="flex justify-between items-center mb-4">
                             <p className="text-base sm:text-lg font-semibold text-gray-900">
@@ -189,7 +201,7 @@ function AllCategories() {
                         )}
 
                         {/* Product Grid */}
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-1">
+                        <div className="grid grid-cols-3 pb-3 sm:grid-cols-3 gap-1">
                             {products.map((product, index) => {
                                 const productId = String(
                                     product.id ||
@@ -238,10 +250,10 @@ function AllCategories() {
                                                     <img
                                                         src={imageSrc}
                                                         alt={product.title}
-                                                        className="w-full h-32 sm:h-36 object-cover group-hover:scale-105 transition"
+                                                        className="w-full h-32 sm:h-29 object-cover group-hover:scale-105 transition"
                                                     />
                                                 ) : (
-                                                    <div className="w-full h-32 sm:h-36 bg-gray-200" />
+                                                    <div className="w-full h-32 sm:h-29 bg-gray-200" />
                                                 )}
                                             </div>
 
@@ -251,11 +263,11 @@ function AllCategories() {
                                                     {product.title || "Untitled"}
                                                 </p>
 
-                                                <p className="text-xs text-gray-500">
+                                                {/* <p className="text-xs text-gray-500">
                                                     {product.brand || "Generic"}
-                                                </p>
+                                                </p> */}
 
-                                                <div className="flex items-center gap-2">
+                                                {/* <div className="flex items-center gap-2">
                                                     <p className="text-sm font-semibold text-gray-900">
                                                         {formatPrice(product.price)}
                                                     </p>
@@ -265,11 +277,11 @@ function AllCategories() {
                                                             NGN {oldPrice.toLocaleString()}
                                                         </p>
                                                     )}
-                                                </div>
+                                                </div> */}
 
-                                                <p className="text-xs text-green-600 font-medium">
+                                                {/* <p className="text-xs text-green-600 font-medium">
                                                     Hot Deal
-                                                </p>
+                                                </p> */}
                                             </div>
                                         </article>
                                     </Link>

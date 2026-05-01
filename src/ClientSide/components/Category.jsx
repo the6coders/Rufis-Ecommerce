@@ -41,7 +41,20 @@ function Categories() {
 
             try {
                 const response = await getCategories(currentMerchantId);
-                setCategories(extractList(response.data));
+                let categoryList = extractList(response.data);
+
+                if (categoryList.length === 0 && currentMerchantId !== DEFAULT_MERCHANT_ID) {
+                    const fallbackResponse = await getCategories(DEFAULT_MERCHANT_ID);
+                    const fallbackList = extractList(fallbackResponse.data);
+
+                    if (fallbackList.length > 0) {
+                        localStorage.setItem("merchant_id", DEFAULT_MERCHANT_ID);
+                        setMerchantId(DEFAULT_MERCHANT_ID);
+                        categoryList = fallbackList;
+                    }
+                }
+
+                setCategories(categoryList);
             } catch {
                 setCategories([]);
             }
