@@ -177,7 +177,7 @@ function AllCategories() {
                     </aside>
 
                     {/* Products (3 span) */}
-                    <div className="col-span-4 bg-white h-screen overflow-y-auto rounded-lg p-2 min-w-0">
+                    <div className="col-span-4 bg-white h-screen overflow-y-auto rounded-lg min-w-0">
 
                         <div className="flex justify-between items-center mb-4">
                             <p className="text-base sm:text-lg font-semibold text-gray-900">
