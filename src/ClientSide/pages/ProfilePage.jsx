@@ -51,7 +51,7 @@ function ProfilePage() {
             <main className="max-w-md mx-auto px-3 py-4 space-y-3">
                 <h1 className="text-lg font-semibold text-gray-900 px-1">My Profile</h1>
 
-                <section className="bg-white rounded-xl border border-gray-200 p-3 flex items-center justify-between gap-3">
+                <section className="bg-white rounded-xl border border-gray-100 p-3 flex items-center justify-between gap-3">
                     <div className="min-w-0">
                         {isLoggedIn ? (
                             <>
@@ -77,36 +77,36 @@ function ProfilePage() {
                     )}
                 </section>
 
-                <section className="bg-white rounded-xl border border-gray-200 p-3">
+                <section className="bg-white rounded-xl border border-gray-100 p-3">
                     <p className="text-sm font-semibold text-gray-900 mb-3">Orders & Shopping</p>
                     <div className="grid grid-cols-2 gap-2">
-                        <Link to="/cart" className="rounded-lg border border-gray-200 p-3 bg-gray-50 hover:bg-gray-100 transition-colors">
+                        <Link to="/cart" className="rounded-lg border border-gray-100 p-3 bg-gray-50 hover:bg-gray-100 transition-colors">
                             <p className="text-xs text-gray-500">Track</p>
                             <p className="text-sm font-semibold text-gray-900 mt-1">My Orders</p>
                         </Link>
-                        <button type="button" className="rounded-lg border border-gray-200 p-3 bg-gray-50 text-left hover:bg-gray-100 transition-colors">
+                        <button type="button" className="rounded-lg border border-gray-100 p-3 bg-gray-50 text-left hover:bg-gray-100 transition-colors">
                             <p className="text-xs text-gray-500">Saved</p>
                             <p className="text-sm font-semibold text-gray-900 mt-1">Wishlist</p>
                         </button>
-                        <button type="button" className="rounded-lg border border-gray-200 p-3 bg-gray-50 text-left hover:bg-gray-100 transition-colors">
+                        <button type="button" className="rounded-lg border border-gray-100 p-3 bg-gray-50 text-left hover:bg-gray-100 transition-colors">
                             <p className="text-xs text-gray-500">Offers</p>
                             <p className="text-sm font-semibold text-gray-900 mt-1">Coupons</p>
                         </button>
-                        <button type="button" className="rounded-lg border border-gray-200 p-3 bg-gray-50 text-left hover:bg-gray-100 transition-colors">
+                        <button type="button" className="rounded-lg border border-gray-100 p-3 bg-gray-50 text-left hover:bg-gray-100 transition-colors">
                             <p className="text-xs text-gray-500">Support</p>
                             <p className="text-sm font-semibold text-gray-900 mt-1">Help Center</p>
                         </button>
                     </div>
                 </section>
 
-                <section className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100">
+                <section className="bg-white rounded-xl border border-gray-100 divide-y divide-gray-50">
                     <p className="text-sm font-semibold text-gray-900 px-3 py-3">Rewards & Benefits</p>
                     <ProfileRow icon={FiGift} title="Exclusive Offers" subtitle="Get deals curated for your account" />
                     <ProfileRow icon={FiTag} title="My Coupons" subtitle="View and apply saved coupon codes" />
                     <ProfileRow icon={FiHeart} title="Saved Items" subtitle="Products you liked and saved" />
                 </section>
 
-                <section className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100">
+                <section className="bg-white rounded-xl border border-gray-100 divide-y divide-gray-50">
                     <p className="text-sm font-semibold text-gray-900 px-3 py-3">Account Settings</p>
                     <ProfileRow icon={FiUser} title="Profile Information" subtitle="Manage your personal details" />
                     <ProfileRow icon={FiMapPin} title="Addresses" subtitle="Add and edit delivery addresses" />
@@ -132,7 +132,7 @@ function ProfilePage() {
                     </button>
                 </section>
 
-                <section className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100">
+                <section className="bg-white rounded-xl border border-gray-100 divide-y divide-gray-50">
                     <p className="text-sm font-semibold text-gray-900 px-3 py-3">Privacy & Support</p>
                     <ProfileRow icon={FiShield} title="Terms, Policies & Licenses" />
                     <Link to="/login">

@@ -1,5 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import AdminLayout from "./admin/layout/AdminLayout";
 import ClientLayout from "./ClientSide/layout/ClientLayout";
@@ -20,8 +20,13 @@ import AllCategories from "./ClientSide/pages/AllCategories";
 import ProfilePage from "./ClientSide/pages/ProfilePage";
 import LoginPage from "./ClientSide/pages/LoginPage";
 import SignupPage from "./ClientSide/pages/SignupPage";
+import SplashPage from "./ClientSide/pages/SplashPage";
 
 function App() {
+  const [hasSeenSplash, setHasSeenSplash] = useState(
+    () => localStorage.getItem("onboarding_seen") === "true"
+  );
+
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     const theme =
@@ -35,18 +40,38 @@ function App() {
     localStorage.setItem("theme", theme);
   }, []);
 
+  const handleSplashFinish = () => {
+    localStorage.setItem("onboarding_seen", "true");
+    setHasSeenSplash(true);
+  };
+
   return (
     <BrowserRouter>
       <Routes>
+
+        <Route
+          path="/splash"
+          element={
+            hasSeenSplash ? (
+              <Navigate to="/" replace />
+            ) : (
+              <SplashPage onFinish={handleSplashFinish} />
+            )
+          }
+        />
 
         {/* CLIENT ROUTES WRAPPED IN LAYOUT */}
 
         <Route
           path="/"
           element={
-            <ClientLayout>
-              <HomePage />
-            </ClientLayout>
+            hasSeenSplash ? (
+              <ClientLayout>
+                <HomePage />
+              </ClientLayout>
+            ) : (
+              <Navigate to="/splash" replace />
+            )
           }
         />
 
