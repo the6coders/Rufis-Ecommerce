@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiChevronRight, FiGift, FiHeart, FiMapPin, FiPackage, FiSettings, FiShield, FiTag, FiUser } from "react-icons/fi";
 import Footer from "../components/footer";
 
@@ -21,6 +21,18 @@ function ProfileRow({ icon: Icon, title, subtitle }) {
 }
 
 function ProfilePage() {
+    const navigate = useNavigate();
+    const userId = localStorage.getItem("client_user_id") || localStorage.getItem("user_id") || "";
+    const userName = localStorage.getItem("user_name") || "";
+    const isLoggedIn = Boolean(userId);
+
+    const handleLogout = () => {
+        localStorage.removeItem("client_user_id");
+        localStorage.removeItem("user_id");
+        localStorage.removeItem("user_name");
+        navigate("/profile");
+    };
+
     return (
         <div className="min-h-screen bg-gray-100 pb-[calc(5rem+env(safe-area-inset-bottom))]">
             <main className="max-w-md mx-auto px-3 py-4 space-y-3">
@@ -28,15 +40,28 @@ function ProfilePage() {
 
                 <section className="bg-white rounded-xl border border-gray-200 p-3 flex items-center justify-between gap-3">
                     <div className="min-w-0">
-                        <p className="text-sm font-semibold text-gray-900">Account</p>
-                        <p className="text-xs text-gray-500 mt-0.5">Log in to get exclusive offers</p>
+                        {isLoggedIn ? (
+                            <>
+                                <p className="text-sm font-semibold text-gray-900">
+                                    Hi, {userName || "User"}
+                                </p>
+                                <p className="text-xs text-gray-500 mt-0.5">Welcome back!</p>
+                            </>
+                        ) : (
+                            <>
+                                <p className="text-sm font-semibold text-gray-900">Account</p>
+                                <p className="text-xs text-gray-500 mt-0.5">Log in to get exclusive offers</p>
+                            </>
+                        )}
                     </div>
-                    <button
-                        type="button"
-                        className="shrink-0 rounded-md bg-blue-600 text-white text-xs font-semibold px-4 py-2 hover:bg-blue-700 transition-colors"
-                    >
-                        LOGIN
-                    </button>
+                    {!isLoggedIn && (
+                        <Link
+                            to="/login"
+                            className="shrink-0 rounded-md bg-blue-600 text-white text-xs font-semibold px-4 py-2 hover:bg-blue-700 transition-colors"
+                        >
+                            LOGIN
+                        </Link>
+                    )}
                 </section>
 
                 <section className="bg-white rounded-xl border border-gray-200 p-3">
@@ -81,6 +106,7 @@ function ProfilePage() {
                     <ProfileRow icon={FiShield} title="Terms, Policies & Licenses" />
                     <button
                         type="button"
+                        onClick={handleLogout}
                         className="w-full text-left px-3 py-3 text-sm font-semibold text-red-600 hover:bg-red-50 transition-colors"
                     >
                         Logout

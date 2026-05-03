@@ -98,6 +98,8 @@ export const checkoutCart = async (checkoutData) => await api.post("/carts/check
 // 🔹 GET USERS
 export const getUsers = async () => await api.get("/users");
 
+export const loginUser = async (loginData) => await api.post("/users/login", loginData);
+
 export const createUser = async (userData) => await api.post("/users", userData);
 
 export const updateUser = async (userId, userData) => await api.put(`/users/${userId}`, userData);

@@ -17,6 +17,8 @@ import CartPage from "./ClientSide/pages/CartPage";
 import CheckoutPage from "./ClientSide/pages/CheckoutPage";
 import AllCategories from "./ClientSide/pages/AllCategories";
 import ProfilePage from "./ClientSide/pages/ProfilePage";
+import LoginPage from "./ClientSide/pages/LoginPage";
+import SignupPage from "./ClientSide/pages/SignupPage";
 
 function App() {
   return (
@@ -78,6 +80,16 @@ function App() {
         <Route
           path="/profile"
           element={<ProfilePage />}
+        />
+
+        <Route
+          path="/login"
+          element={<LoginPage />}
+        />
+
+        <Route
+          path="/signup"
+          element={<SignupPage />}
         />
 
 {/* CLIENT CATEGORY ROUTES WRAPPED IN LAYOUT */}
