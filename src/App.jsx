@@ -16,6 +16,7 @@ import ProductDetailsPage from "./ClientSide/pages/ProductDetailsPage";
 import CartPage from "./ClientSide/pages/CartPage";
 import CheckoutPage from "./ClientSide/pages/CheckoutPage";
 import AllCategories from "./ClientSide/pages/AllCategories";
+import ProfilePage from "./ClientSide/pages/ProfilePage";
 
 function App() {
   return (
@@ -72,6 +73,11 @@ function App() {
               <CheckoutPage />
             </ClientLayout>
           }
+        />
+
+        <Route
+          path="/profile"
+          element={<ProfilePage />}
         />
 
 {/* CLIENT CATEGORY ROUTES WRAPPED IN LAYOUT */}
