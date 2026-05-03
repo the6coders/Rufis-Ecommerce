@@ -104,13 +104,15 @@ function ProfilePage() {
                 <section className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100">
                     <p className="text-sm font-semibold text-gray-900 px-3 py-3">Privacy & Support</p>
                     <ProfileRow icon={FiShield} title="Terms, Policies & Licenses" />
-                    <button
-                        type="button"
-                        onClick={handleLogout}
-                        className="w-full text-left px-3 py-3 text-sm font-semibold text-red-600 hover:bg-red-50 transition-colors"
-                    >
-                        Logout
-                    </button>
+                    <Link to="/login">
+                        <button
+                            type="button"
+                            onClick={handleLogout}
+                            className="w-full text-left px-3 py-3 text-sm font-semibold text-red-600 hover:bg-red-50 transition-colors"
+                        >
+                            Logout
+                        </button>
+                    </Link>
                 </section>
             </main>
 
