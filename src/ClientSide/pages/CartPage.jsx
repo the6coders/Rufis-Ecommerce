@@ -23,8 +23,20 @@ function CartPage() {
     return `N ${numeric.toLocaleString()}`;
   };
 
-  const normalizeCartItem = (item, index) => {
-    const product = item?.product || item?.products || item?.product_details || {};
+  const normalizeCartItem = (item, index, productLookup = {}) => {
+    const inlineProduct = item?.product || item?.products || item?.product_details || {};
+    const resolvedProductId = String(
+      inlineProduct?.id ||
+      inlineProduct?.product_id ||
+      inlineProduct?._id ||
+      item?.product_id ||
+      ""
+    );
+    const matchedProduct = resolvedProductId ? productLookup[resolvedProductId] || {} : {};
+    const product = {
+      ...inlineProduct,
+      ...matchedProduct,
+    };
     const id = String(
       item?.id ||
       item?.cart_id ||
@@ -38,7 +50,8 @@ function CartPage() {
 
     const title = product?.title || item?.title || item?.name || "Untitled product";
     const brand = product?.brand || item?.brand || "Generic";
-    const image = product?.images?.[0] || product?.image || item?.image || "";
+    const firstImage = Array.isArray(product?.images) ? product.images[0] : product?.images;
+    const image = firstImage || product?.image || product?.image_url || item?.image || "";
     const quantity = Math.max(1, Number(item?.quantity || item?.qty || item?.count || 1));
     const price = parseNonNegativeNumber(product?.price ?? item?.price ?? item?.unit_price ?? 0);
 
@@ -75,9 +88,22 @@ function CartPage() {
       setError("");
 
       try {
-        const response = await getCart(userId);
-        const rawList = extractList(response.data);
-        setCartItems(rawList.map((item, index) => normalizeCartItem(item, index)));
+        const merchantId = localStorage.getItem("merchant_id") || DEFAULT_MERCHANT_ID;
+        const [cartResponse, productsResponse] = await Promise.all([
+          getCart(userId),
+          getProducts(merchantId),
+        ]);
+
+        const rawList = extractList(cartResponse.data);
+        const productList = extractList(productsResponse.data);
+        const productLookup = {};
+
+        productList.forEach((product) => {
+          const productId = String(product?.id || product?.product_id || product?._id || "");
+          if (productId) productLookup[productId] = product;
+        });
+
+        setCartItems(rawList.map((item, index) => normalizeCartItem(item, index, productLookup)));
       } catch {
         setError("Could not load your cart right now.");
         setCartItems([]);

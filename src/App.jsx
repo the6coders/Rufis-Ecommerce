@@ -101,7 +101,7 @@ function App() {
         <Route
           path="/cart"
           element={
-            <ClientLayout>
+            <ClientLayout showNavbar={false} showCategories={false}>
               <CartPage />
             </ClientLayout>
           }
