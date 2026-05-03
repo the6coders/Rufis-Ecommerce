@@ -100,7 +100,7 @@ function SignupPage() {
                                 value={form.name}
                                 onChange={onChange}
                                 required
-                                placeholder="John Doe"
+                                placeholder="Rufis Data"
                                 className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
                             />
                         </div>
@@ -113,7 +113,7 @@ function SignupPage() {
                                 value={form.email}
                                 onChange={onChange}
                                 required
-                                placeholder="you@example.com"
+                                placeholder="rufisdata@example.com"
                                 className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
                             />
                         </div>
@@ -134,47 +134,51 @@ function SignupPage() {
                         <div>
                             <div className="flex items-center justify-between mb-1">
                                 <label className="block text-xs font-semibold text-gray-700">Password</label>
+                            </div>
+                            <div className="w-full flex items-center justify-between rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100 transition">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    name="password"
+                                    value={form.password}
+                                    onChange={onChange}
+                                    required
+                                    placeholder="At least 6 characters"
+                                    className="flex-1 outline-none bg-transparent"
+                                />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword((prev) => !prev)}
                                     aria-label={showPassword ? "Hide password" : "Show password"}
-                                    className="text-blue-600 hover:text-blue-700"
+                                    className="ml-2 text-blue-600 hover:text-blue-700"
                                 >
-                                    {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                                    {showPassword ? <FiEyeOff className="text-gray-500" /> : <FiEye className="text-gray-500" />}
                                 </button>
                             </div>
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                name="password"
-                                value={form.password}
-                                onChange={onChange}
-                                required
-                                placeholder="At least 6 characters"
-                                className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
-                            />
                         </div>
 
                         <div>
                             <div className="flex items-center justify-between mb-1">
                                 <label className="block text-xs font-semibold text-gray-700">Confirm password</label>
+                            </div>
+                            <div className="w-full flex items-center justify-between rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100 transition">
+                                <input
+                                    type={showConfirmPassword ? "text" : "password"}
+                                    name="confirm"
+                                    value={form.confirm}
+                                    onChange={onChange}
+                                    required
+                                    placeholder="••••••••"
+                                    className="flex-1 outline-none bg-transparent"
+                                />
                                 <button
                                     type="button"
                                     onClick={() => setShowConfirmPassword((prev) => !prev)}
                                     aria-label={showConfirmPassword ? "Hide password" : "Show password"}
-                                    className="text-blue-600 hover:text-blue-700"
+                                    className="ml-2 text-blue-600 hover:text-blue-700"
                                 >
-                                    {showConfirmPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                                    {showConfirmPassword ? <FiEyeOff className="text-gray-500" /> : <FiEye className="text-gray-500" />}
                                 </button>
                             </div>
-                            <input
-                                type={showConfirmPassword ? "text" : "password"}
-                                name="confirm"
-                                value={form.confirm}
-                                onChange={onChange}
-                                required
-                                placeholder="••••••••"
-                                className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
-                            />
                         </div>
 
                         <button

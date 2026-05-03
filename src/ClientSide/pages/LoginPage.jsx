@@ -83,24 +83,29 @@ function LoginPage() {
                         <div>
                             <div className="flex items-center justify-between mb-1">
                                 <label className="block text-xs font-semibold text-gray-700">Password</label>
+
+                            </div>
+                            <div className="w-full flex justify-between rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    name="password"
+                                    value={form.password}
+                                    onChange={onChange}
+                                    required
+                                    placeholder="••••••••"
+                                ></input>
+
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword((prev) => !prev)}
                                     aria-label={showPassword ? "Hide password" : "Show password"}
-                                    className="text-blue-600 hover:text-blue-700"
-                                >
-                                    {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                                    className="text-blue-600 hover:text-blue-700">
+
+                                    {showPassword ? <FiEyeOff className="text-gray-500" /> : <FiEye className="text-gray-500" />}
                                 </button>
                             </div>
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                name="password"
-                                value={form.password}
-                                onChange={onChange}
-                                required
-                                placeholder="••••••••"
-                                className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
-                            />
+
+
                         </div>
 
                         <button
