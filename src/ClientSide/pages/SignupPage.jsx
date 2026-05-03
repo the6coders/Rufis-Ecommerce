@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import { createUser, extractObject } from "../../api/services";
 
 function SignupPage() {
@@ -136,9 +137,10 @@ function SignupPage() {
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword((prev) => !prev)}
-                                    className="text-xs font-semibold text-blue-600 hover:text-blue-700"
+                                    aria-label={showPassword ? "Hide password" : "Show password"}
+                                    className="text-blue-600 hover:text-blue-700"
                                 >
-                                    {showPassword ? "Hide" : "Show"}
+                                    {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
                                 </button>
                             </div>
                             <input
@@ -158,9 +160,10 @@ function SignupPage() {
                                 <button
                                     type="button"
                                     onClick={() => setShowConfirmPassword((prev) => !prev)}
-                                    className="text-xs font-semibold text-blue-600 hover:text-blue-700"
+                                    aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                                    className="text-blue-600 hover:text-blue-700"
                                 >
-                                    {showConfirmPassword ? "Hide" : "Show"}
+                                    {showConfirmPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
                                 </button>
                             </div>
                             <input

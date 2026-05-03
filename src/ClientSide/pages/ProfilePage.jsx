@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
-import { FiChevronRight, FiGift, FiHeart, FiMapPin, FiPackage, FiSettings, FiShield, FiTag, FiUser } from "react-icons/fi";
+import { useEffect, useState } from "react";
+import { FiChevronRight, FiGift, FiHeart, FiMapPin, FiMoon, FiPackage, FiSettings, FiShield, FiSun, FiTag, FiUser } from "react-icons/fi";
 import Footer from "../components/footer";
 
 function ProfileRow({ icon: Icon, title, subtitle }) {
@@ -25,6 +26,18 @@ function ProfilePage() {
     const userId = localStorage.getItem("client_user_id") || localStorage.getItem("user_id") || "";
     const userName = localStorage.getItem("user_name") || "";
     const isLoggedIn = Boolean(userId);
+    const [theme, setTheme] = useState(() => {
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "light" || savedTheme === "dark") {
+            return savedTheme;
+        }
+        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    });
+
+    useEffect(() => {
+        document.documentElement.classList.toggle("dark", theme === "dark");
+        localStorage.setItem("theme", theme);
+    }, [theme]);
 
     const handleLogout = () => {
         localStorage.removeItem("client_user_id");
@@ -99,6 +112,24 @@ function ProfilePage() {
                     <ProfileRow icon={FiMapPin} title="Addresses" subtitle="Add and edit delivery addresses" />
                     <ProfileRow icon={FiPackage} title="My Activity" subtitle="Returns, cancellations, and more" />
                     <ProfileRow icon={FiSettings} title="Preferences" subtitle="Language, notifications, and settings" />
+                    <button
+                        type="button"
+                        onClick={() => setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"))}
+                        className="w-full flex items-center gap-3 px-3 py-3 text-left hover:bg-gray-50 transition-colors"
+                    >
+                        <span className="w-9 h-9 rounded-full bg-gray-100 text-gray-700 flex items-center justify-center shrink-0">
+                            {theme === "dark" ? <FiSun size={16} /> : <FiMoon size={16} />}
+                        </span>
+                        <span className="min-w-0 flex-1">
+                            <p className="text-sm font-medium text-gray-900">Theme</p>
+                            <p className="text-xs text-gray-500 mt-0.5">
+                                {theme === "dark" ? "Dark mode enabled" : "Light mode enabled"}
+                            </p>
+                        </span>
+                        <span className="text-xs font-semibold text-blue-600">
+                            {theme === "dark" ? "Dark" : "Light"}
+                        </span>
+                    </button>
                 </section>
 
                 <section className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100">
