@@ -155,12 +155,12 @@ function AllCategories() {
                                                 : "hover:bg-gray-100 text-gray-700"
                                             }`}
                                     >
-                                        <div className="w-6 h-6 bg-gray-100 rounded-md overflow-hidden">
+                                        <div className="category-icon-frame w-6 h-6 bg-gray-100 rounded-md overflow-hidden">
                                             {imageSrc ? (
                                                 <img
                                                     src={imageSrc}
                                                     alt={cat.name || "Category"}
-                                                    className="w-full h-full object-cover"
+                                                    className="category-icon-image w-full h-full object-cover"
                                                 />
                                             ) : (
                                                 <div className="w-full h-full bg-gray-200" />

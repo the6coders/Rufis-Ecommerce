@@ -83,7 +83,7 @@ function Categories() {
                         className="flex flex-col mt-3 items-center min-w-15"
                     >
                         {imageSrc
-                            ? <img src={imageSrc} alt={cat.name || "Category"} className="w-5 h-5 object-cover rounded-full" />
+                            ? <img src={imageSrc} alt={cat.name || "Category"} className="category-icon-image w-5 h-5 object-cover rounded-full" />
                             : <div className="w-5 h-5 rounded-full bg-gray-200" />
                         }
                         <p className="text-xs mt-1 text-center">{String(cat.name || "Category").slice(0, 9)}</p>
