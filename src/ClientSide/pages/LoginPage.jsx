@@ -7,6 +7,7 @@ function LoginPage() {
     const [form, setForm] = useState({ email: "", password: "" });
     const [error, setError] = useState("");
     const [submitting, setSubmitting] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const onChange = (e) => {
         const { name, value } = e.target;
@@ -79,9 +80,18 @@ function LoginPage() {
                         </div>
 
                         <div>
-                            <label className="block text-xs font-semibold text-gray-700 mb-1">Password</label>
+                            <div className="flex items-center justify-between mb-1">
+                                <label className="block text-xs font-semibold text-gray-700">Password</label>
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword((prev) => !prev)}
+                                    className="text-xs font-semibold text-blue-600 hover:text-blue-700"
+                                >
+                                    {showPassword ? "Hide" : "Show"}
+                                </button>
+                            </div>
                             <input
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 name="password"
                                 value={form.password}
                                 onChange={onChange}

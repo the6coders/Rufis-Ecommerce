@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import AdminLayout from "./admin/layout/AdminLayout";
 import ClientLayout from "./ClientSide/layout/ClientLayout";
@@ -21,8 +22,38 @@ import LoginPage from "./ClientSide/pages/LoginPage";
 import SignupPage from "./ClientSide/pages/SignupPage";
 
 function App() {
+  const getInitialTheme = () => {
+    if (typeof window === "undefined") return "light";
+
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "light" || savedTheme === "dark") {
+      return savedTheme;
+    }
+
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  };
+
+  const [theme, setTheme] = useState(getInitialTheme);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
+  };
+
   return (
     <BrowserRouter>
+      <button
+        type="button"
+        onClick={toggleTheme}
+        aria-label="Toggle dark mode"
+        className="fixed top-4 right-4 z-[70] rounded-full border border-gray-300 bg-white/95 px-4 py-2 text-xs font-semibold text-gray-800 shadow-md backdrop-blur hover:bg-gray-50 transition-colors"
+      >
+        {theme === "dark" ? "Light mode" : "Dark mode"}
+      </button>
       <Routes>
 
         {/* CLIENT ROUTES WRAPPED IN LAYOUT */}
