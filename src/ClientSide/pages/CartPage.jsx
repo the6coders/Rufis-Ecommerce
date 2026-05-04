@@ -191,7 +191,7 @@ function CartPage() {
         const normalizedItems = rawList.map((item, index) => normalizeCartItem(item, index, productLookup));
         const missingProductIds = [...new Set(
           normalizedItems
-            .filter((item) => (!item.image || item.price <= 0) && item.productId)
+            .filter((item) => ((!item.image || item.price <= 0) || item.title === "Untitled product") && item.productId)
             .map((item) => item.productId)
         )];
 
@@ -213,7 +213,12 @@ function CartPage() {
           });
         }
 
-        setCartItems(rawList.map((item, index) => normalizeCartItem(item, index, productLookup)));
+        // Filter out ghost/orphaned entries that have no valid product (no id and no title)
+        const finalItems = rawList
+          .map((item, index) => normalizeCartItem(item, index, productLookup))
+          .filter((item) => item.productId && item.title !== "Untitled product");
+
+        setCartItems(finalItems);
       } catch {
         setError("Could not load your cart right now.");
         setCartItems([]);
