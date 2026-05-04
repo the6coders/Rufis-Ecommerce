@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaStar } from "react-icons/fa6";
-import { DEFAULT_MERCHANT_ID, extractList, getCart, getProducts } from "../../api/services";
+import { DEFAULT_MERCHANT_ID, extractList, extractObject, getCart, getProductById, getProducts } from "../../api/services";
 
 function CartPage() {
   const navigate = useNavigate();
@@ -20,16 +20,90 @@ function CartPage() {
   const formatPrice = (value) => {
     const numeric = parseNonNegativeNumber(value);
     if (numeric <= 0) return "No price";
-    return `N ${numeric.toLocaleString()}`;
+    return `₦ ${numeric.toLocaleString()}`;
+  };
+
+  const resolveProductId = (value) => {
+    if (!value) return "";
+    if (typeof value === "object") {
+      return String(value.id || value.product_id || value._id || "");
+    }
+    return String(value);
+  };
+
+  const normalizeImageValue = (value) => {
+    if (!value) return "";
+    if (typeof value === "string") return value;
+    if (typeof value !== "object") return "";
+
+    if (Array.isArray(value)) {
+      for (const entry of value) {
+        const normalized = normalizeImageValue(entry);
+        if (normalized) return normalized;
+      }
+      return "";
+    }
+
+    return (
+      normalizeImageValue(value.url) ||
+      normalizeImageValue(value.secure_url) ||
+      normalizeImageValue(value.src) ||
+      normalizeImageValue(value.path) ||
+      normalizeImageValue(value.image) ||
+      normalizeImageValue(value.image_url) ||
+      normalizeImageValue(value.thumbnail) ||
+      normalizeImageValue(value.photo) ||
+      ""
+    );
+  };
+
+  const getPrimaryImage = (source) => {
+    if (!source || typeof source !== "object") return "";
+
+    const fromImages = normalizeImageValue(source.images);
+    if (fromImages) return fromImages;
+
+    return normalizeImageValue(source.image || source.image_url || source.thumbnail || source.photo || source.cover_image);
+  };
+
+  const flattenCartEntries = (entries) => {
+    const flattened = [];
+
+    entries.forEach((entry) => {
+      if (Array.isArray(entry?.products) && entry.products.length > 0) {
+        entry.products.forEach((productEntry, productIndex) => {
+          flattened.push({
+            ...entry,
+            ...productEntry,
+            product_id:
+              productEntry?.product_id ||
+              productEntry?.id ||
+              productEntry?._id ||
+              entry?.product_id ||
+              entry?.id ||
+              "",
+            quantity: productEntry?.quantity ?? entry?.quantity,
+            amount: productEntry?.amount ?? entry?.amount,
+            _cartCompositeId: `${entry?.id || entry?._id || "cart"}-${productIndex}`,
+          });
+        });
+        return;
+      }
+
+      flattened.push(entry);
+    });
+
+    return flattened;
   };
 
   const normalizeCartItem = (item, index, productLookup = {}) => {
-    const inlineProduct = item?.product || item?.products || item?.product_details || {};
-    const resolvedProductId = String(
+    const inlineProduct = item?.product || item?.product_details || item?.product_id || {};
+    const resolvedProductId = resolveProductId(
       inlineProduct?.id ||
       inlineProduct?.product_id ||
       inlineProduct?._id ||
       item?.product_id ||
+      item?.productId ||
       ""
     );
     const matchedProduct = resolvedProductId ? productLookup[resolvedProductId] || {} : {};
@@ -38,6 +112,7 @@ function CartPage() {
       ...matchedProduct,
     };
     const id = String(
+      item?._cartCompositeId ||
       item?.id ||
       item?.cart_id ||
       item?._id ||
@@ -48,12 +123,19 @@ function CartPage() {
       index
     );
 
-    const title = product?.title || item?.title || item?.name || "Untitled product";
+    const title = product?.title || product?.name || item?.title || item?.name || "Untitled product";
     const brand = product?.brand || item?.brand || "Generic";
-    const firstImage = Array.isArray(product?.images) ? product.images[0] : product?.images;
-    const image = firstImage || product?.image || product?.image_url || item?.image || "";
+    const image = getPrimaryImage(product) || getPrimaryImage(item) || "";
     const quantity = Math.max(1, Number(item?.quantity || item?.qty || item?.count || 1));
-    const price = parseNonNegativeNumber(product?.price ?? item?.price ?? item?.unit_price ?? 0);
+    const price = parseNonNegativeNumber(
+      product?.price ??
+      product?.amount ??
+      product?.selling_price ??
+      item?.price ??
+      item?.unit_price ??
+      item?.amount ??
+      0
+    );
 
     const ratingRaw = parseNonNegativeNumber(product?.rating ?? item?.rating ?? 0);
     const rating = ratingRaw > 0 ? Math.min(5, ratingRaw) : 4.2;
@@ -70,7 +152,7 @@ function CartPage() {
       price,
       rating,
       reviews,
-      productId: String(product?.id || product?.product_id || product?._id || item?.product_id || id),
+      productId: resolveProductId(product?.id || product?.product_id || product?._id || item?.product_id || id),
     };
   };
 
@@ -94,14 +176,39 @@ function CartPage() {
           getProducts(merchantId),
         ]);
 
-        const rawList = extractList(cartResponse.data);
+        const rawList = flattenCartEntries(extractList(cartResponse.data));
         const productList = extractList(productsResponse.data);
         const productLookup = {};
 
         productList.forEach((product) => {
-          const productId = String(product?.id || product?.product_id || product?._id || "");
+          const productId = resolveProductId(product?.id || product?.product_id || product?._id || "");
           if (productId) productLookup[productId] = product;
         });
+
+        const normalizedItems = rawList.map((item, index) => normalizeCartItem(item, index, productLookup));
+        const missingProductIds = [...new Set(
+          normalizedItems
+            .filter((item) => (!item.image || item.price <= 0) && item.productId)
+            .map((item) => item.productId)
+        )];
+
+        if (missingProductIds.length > 0) {
+          const fallbackResponses = await Promise.allSettled(
+            missingProductIds.map((productId) => getProductById(productId))
+          );
+
+          fallbackResponses.forEach((result, index) => {
+            if (result.status !== "fulfilled") return;
+            const productId = missingProductIds[index];
+            const productData = extractObject(result.value.data);
+            if (productId && productData) {
+              productLookup[productId] = {
+                ...(productLookup[productId] || {}),
+                ...productData,
+              };
+            }
+          });
+        }
 
         setCartItems(rawList.map((item, index) => normalizeCartItem(item, index, productLookup)));
       } catch {
