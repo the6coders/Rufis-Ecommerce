@@ -47,6 +47,7 @@ function Sidebar({ onNavigate }) {
     { to: "/admin/products", label: "Products" },
     { to: "/admin/categories", label: "Categories" },
     { to: "/admin/users", label: "Users" },
+    { to: "/admin/cart", label: "Carts" },
     { to: "/admin/create-product", label: "Create Product" },
     { to: "/admin/create-category", label: "Create Category" },
     { to: "/admin/create-user", label: "Create User" },

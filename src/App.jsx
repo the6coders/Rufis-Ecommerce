@@ -11,6 +11,7 @@ import Users from "./admin/pages/Users";
 import CreateProduct from "./admin/pages/CreateProduct";
 import CreateCategory from "./admin/pages/CreateCategory";
 import CreateUser from "./admin/pages/CreateUser";
+import Cart from "./admin/pages/Cart";
 import HomePage from "./ClientSide/pages/HomePage";
 import ProductListPage from "./ClientSide/pages/ProductListPage";
 import ProductDetailsPage from "./ClientSide/pages/ProductDetailsPage";
@@ -143,6 +144,15 @@ function App() {
         <Route path="/admin" element={<AdminLayout> <Dashboard /> </AdminLayout>} />
 
         <Route path="/admin/dashboard" element={<Navigate to="/admin" replace />} />
+
+        <Route
+          path="/admin/cart"
+          element={
+            <AdminLayout>
+              <Cart />
+            </AdminLayout>
+          }
+        />
 
         <Route
           path="/admin/products"
