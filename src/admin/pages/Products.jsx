@@ -169,27 +169,27 @@ function Products() {
     };
 
     return (
-        <div>
-            <h1 className="text-2xl font-bold mb-4">Products</h1>
+        <div className="space-y-4 overflow-x-hidden">
+            <h1 className="text-xl sm:text-2xl font-bold">Products</h1>
 
-            <div className="bg-white p-4 rounded shadow mb-5 flex flex-wrap items-end gap-3">
-                <div>
+            <div className="bg-white p-4 rounded shadow mb-5 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-end gap-3">
+                <div className="w-full sm:w-auto">
                     <label className="block text-sm mb-1">Merchant ID</label>
                     <input
-                        className="border rounded px-3 py-2 min-w-64"
+                        className="border rounded px-3 py-2 w-full sm:min-w-64"
                         value={merchantId}
                         onChange={(e) => setMerchantId(e.target.value)}
                         placeholder="Enter merchant id"
                     />
                 </div>
 
-                <button onClick={() => loadProducts(activeCategoryId)} className="bg-gray-900 text-white px-4 py-2 rounded">
+                <button onClick={() => loadProducts(activeCategoryId)} className="bg-gray-900 text-white px-4 py-2 rounded w-full sm:w-auto">
                     Load Products
                 </button>
 
-                <div className="ml-auto">
+                <div className="w-full sm:w-auto sm:ml-auto">
                     <input
-                        className="border rounded px-3 py-2"
+                        className="border rounded px-3 py-2 w-full sm:w-auto"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder="Search title or brand"

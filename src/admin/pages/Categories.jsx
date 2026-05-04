@@ -68,21 +68,21 @@ function Categories() {
   }, []);
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Categories</h1>
+    <div className="space-y-4 overflow-x-hidden">
+      <h1 className="text-xl sm:text-2xl font-bold">Categories</h1>
 
-      <div className="bg-white p-4 rounded shadow mb-5 flex flex-wrap items-end gap-3">
-        <div>
+      <div className="bg-white p-4 rounded shadow mb-5 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-end gap-3">
+        <div className="w-full sm:w-auto">
           <label className="block text-sm mb-1">Merchant ID</label>
           <input
-            className="border rounded px-3 py-2 min-w-64"
+            className="border rounded px-3 py-2 w-full sm:min-w-64"
             value={merchantId}
             onChange={(event) => setMerchantId(event.target.value)}
             placeholder="Enter merchant id"
           />
         </div>
 
-        <button onClick={loadCategories} className="bg-gray-900 text-white px-4 py-2 rounded" type="button">
+        <button onClick={loadCategories} className="bg-gray-900 text-white px-4 py-2 rounded w-full sm:w-auto" type="button">
           Load Categories
         </button>
       </div>
@@ -102,12 +102,12 @@ function Categories() {
 
 
               return (
-                <li key={categoryId} className="p-4 ">
-                  <div className="grid grid-cols-4 items-center gap-4">
+                <li key={categoryId} className="p-4">
+                  <div className="flex items-center gap-3">
                     {imageSrc ? <img src={imageSrc} alt={category.name || "Category image"} className="w-12 h-12 object-cover rounded" /> : null}
-                    <div>
+                    <div className="min-w-0">
                       <p className="font-medium">{category.name || "Unnamed Category"}</p>
-                      <p className="text-xs text-gray-500">ID: {categoryId}</p>
+                      <p className="text-xs text-gray-500 truncate">ID: {categoryId}</p>
                       <button
                         onClick={() => Delete(categoryId)}
                         className="bg-red-500 text-white text-sm mt-1 px-2 py-1 rounded"

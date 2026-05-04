@@ -52,10 +52,10 @@ function CreateCategory() {
   };
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Create Category</h1>
+    <div className="space-y-4">
+      <h1 className="text-xl sm:text-2xl font-bold">Create Category</h1>
 
-      <form onSubmit={createSingleCategory} className="bg-white rounded shadow p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <form onSubmit={createSingleCategory} className="bg-white rounded shadow p-4 sm:p-5 grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl">
         <div>
           <label className="block text-sm mb-1">Merchant ID</label>
           <input
@@ -94,7 +94,7 @@ function CreateCategory() {
         <div className="md:col-span-2 flex flex-wrap items-center gap-3">
           <button
             disabled={submitting}
-            className="bg-gray-900 text-white px-4 py-2 rounded disabled:opacity-60"
+            className="bg-gray-900 text-white px-4 py-2 rounded disabled:opacity-60 w-full sm:w-auto"
             type="submit"
           >
             {submitting ? "Processing..." : "Create Category"}

@@ -76,10 +76,10 @@ function Users() {
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold">Users</h1>
-        <button onClick={loadUsers} className="bg-gray-900 text-white px-4 py-2 rounded">
+    <div className="space-y-4 overflow-x-hidden">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+        <h1 className="text-xl sm:text-2xl font-bold">Users</h1>
+        <button onClick={loadUsers} className="bg-gray-900 text-white px-4 py-2 rounded w-full sm:w-auto">
           Refresh
         </button>
       </div>
@@ -88,7 +88,7 @@ function Users() {
       {loading ? <p>Loading users...</p> : null}
 
       <div className="bg-white rounded shadow overflow-x-auto">
-        <table className="w-full text-sm">
+        <table className="w-full min-w-[720px] text-sm">
           <thead className="bg-gray-50">
             <tr>
               <th className="text-left px-4 py-3">First Name</th>

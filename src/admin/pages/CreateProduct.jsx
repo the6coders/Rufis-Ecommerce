@@ -313,10 +313,10 @@ function CreateProduct() {
   };
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Create Product</h1>
+    <div className="space-y-4 overflow-x-hidden">
+      <h1 className="text-xl sm:text-2xl font-bold">Create Product</h1>
 
-      <form onSubmit={onSubmit} className="bg-white rounded shadow p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <form onSubmit={onSubmit} className="bg-white rounded shadow p-4 sm:p-5 grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl">
         <div>
           <label className="block text-sm mb-1">Merchant ID</label>
           <input
@@ -471,10 +471,10 @@ function CreateProduct() {
           />
         </div>
 
-        <div className="md:col-span-2 flex items-center gap-3">
+        <div className="md:col-span-2 flex flex-col sm:flex-row sm:items-center gap-3">
           <button
             disabled={submitting}
-            className="bg-gray-900 text-white px-4 py-2 rounded disabled:opacity-60"
+            className="bg-gray-900 text-white px-4 py-2 rounded disabled:opacity-60 w-full sm:w-auto"
             type="submit"
           >
             {submitting ? "Creating..." : "Create Product"}

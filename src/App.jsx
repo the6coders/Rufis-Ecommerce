@@ -22,9 +22,11 @@ import LoginPage from "./ClientSide/pages/LoginPage";
 import SignupPage from "./ClientSide/pages/SignupPage";
 import SplashPage from "./ClientSide/pages/SplashPage";
 
+const ONBOARDING_VERSION = "v2";
+
 function App() {
   const [hasSeenSplash, setHasSeenSplash] = useState(
-    () => localStorage.getItem("onboarding_seen") === "true"
+    () => localStorage.getItem("onboarding_seen_version") === ONBOARDING_VERSION
   );
 
   useEffect(() => {
@@ -41,7 +43,7 @@ function App() {
   }, []);
 
   const handleSplashFinish = () => {
-    localStorage.setItem("onboarding_seen", "true");
+    localStorage.setItem("onboarding_seen_version", ONBOARDING_VERSION);
     setHasSeenSplash(true);
   };
 
@@ -51,13 +53,7 @@ function App() {
 
         <Route
           path="/splash"
-          element={
-            hasSeenSplash ? (
-              <Navigate to="/" replace />
-            ) : (
-              <SplashPage onFinish={handleSplashFinish} />
-            )
-          }
+          element={<SplashPage onFinish={handleSplashFinish} />}
         />
 
         {/* CLIENT ROUTES WRAPPED IN LAYOUT */}

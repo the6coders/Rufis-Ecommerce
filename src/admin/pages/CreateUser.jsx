@@ -47,10 +47,10 @@ function CreateUser() {
   };
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Create User</h1>
+    <div className="space-y-4">
+      <h1 className="text-xl sm:text-2xl font-bold">Create User</h1>
 
-      <form onSubmit={onSubmit} className="bg-white rounded shadow p-5 grid gap-4 max-w-2xl">
+      <form onSubmit={onSubmit} className="bg-white rounded shadow p-4 sm:p-5 grid gap-4 max-w-2xl">
         <div>
           <label className="block text-sm mb-1">Name</label>
           <input
@@ -98,8 +98,8 @@ function CreateUser() {
           />
         </div>
 
-        <div className="flex items-center gap-3">
-          <button disabled={submitting} className="bg-gray-900 text-white px-4 py-2 rounded disabled:opacity-60" type="submit">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+          <button disabled={submitting} className="bg-gray-900 text-white px-4 py-2 rounded disabled:opacity-60 w-full sm:w-auto" type="submit">
             {submitting ? "Creating..." : "Create User"}
           </button>
           {status ? <p className="text-sm text-gray-700">{status}</p> : null}

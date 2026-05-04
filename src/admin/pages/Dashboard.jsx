@@ -73,15 +73,15 @@ function Dashboard() {
   }
 
   return (
-    <div className="p-5">
-      <h1 className="text-2xl font-bold mb-2">Dashboard</h1>
+    <div className="space-y-4">
+      <h1 className="text-xl sm:text-2xl font-bold">Dashboard</h1>
       <p className="text-sm text-gray-500 mb-5">Merchant ID: {merchantId || "N/A"}</p>
 
       {error ? (
         <p className="mb-5 rounded bg-red-100 text-red-700 px-3 py-2">{error}</p>
       ) : null}
 
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div className="bg-white p-5 rounded shadow">
           <h2 className="text-lg font-semibold mb-3">Total Products</h2>
           <p className="text-3xl font-bold">{products.length}</p>
@@ -103,7 +103,7 @@ function Dashboard() {
           <h2 className="text-lg font-semibold">Latest Products (Top 10)</h2>
         </div>
 
-        <table className="w-full text-sm">
+        <table className="w-full min-w-[640px] text-sm">
           <thead className="bg-gray-50">
             <tr>
               <th className="text-left px-4 py-3">Title</th>
