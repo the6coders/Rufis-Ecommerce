@@ -1,10 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { DEFAULT_MERCHANT_ID, extractList, getProducts } from "../../api/services";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { DataContent } from "../../contexts/DataContext";
 
 function ProductListPage() {
   const { categoryId } = useParams();
+  const { searchQuery } = useContext(DataContent);
   const [merchantId, setMerchantId] = useState(localStorage.getItem("merchant_id") || DEFAULT_MERCHANT_ID);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -50,14 +52,31 @@ function ProductListPage() {
   }, [merchantId]);
 
   const filteredProducts = useMemo(() => {
-    if (!categoryId) return products;
+    const loweredQuery = searchQuery.trim().toLowerCase();
 
     return products.filter((product) => {
       const directId = String(product.category_id || product.categoryId || "");
       const nestedId = String(product.category?.id || product.category?._id || "");
-      return directId === String(categoryId) || nestedId === String(categoryId);
+      const matchesCategory = !categoryId || directId === String(categoryId) || nestedId === String(categoryId);
+
+      if (!matchesCategory) return false;
+      if (!loweredQuery) return true;
+
+      const searchableText = [
+        product.title,
+        product.name,
+        product.brand,
+        product.descp,
+        product.description,
+        product.category?.name,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      return searchableText.includes(loweredQuery);
     });
-  }, [products, categoryId]);
+  }, [products, categoryId, searchQuery]);
 
   useEffect(() => {
     const slider = sliderRef.current;
@@ -89,6 +108,7 @@ function ProductListPage() {
   return (
     <div>
       <h1 className="text-xl font-bold mb-4">Products</h1>
+      {searchQuery.trim() ? <p className="text-sm text-gray-500 mb-3">Showing results for "{searchQuery.trim()}"</p> : null}
       {!merchantId ? <p className="text-gray-500 mb-3">Set a merchant ID first to load products.</p> : null}
       {loading ? <p className="text-gray-500 mb-3">Loading products...</p> : null}
 

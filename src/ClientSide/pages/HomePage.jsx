@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { DEFAULT_MERCHANT_ID, extractList, getProducts } from "../../api/services";
+import { DataContent } from "../../contexts/DataContext";
 
 function HomePage() {
+  const { searchQuery } = useContext(DataContent);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -36,6 +38,27 @@ function HomePage() {
       .finally(() => setLoading(false));
   }, []);
 
+  const filteredProducts = useMemo(() => {
+    const loweredQuery = searchQuery.trim().toLowerCase();
+    if (!loweredQuery) return products;
+
+    return products.filter((product) => {
+      const searchableText = [
+        product.title,
+        product.name,
+        product.brand,
+        product.descp,
+        product.description,
+        product.category?.name,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      return searchableText.includes(loweredQuery);
+    });
+  }, [products, searchQuery]);
+
   return (
     <section className="space-y-4">
       <div className="flex items-center justify-between px-1">
@@ -55,13 +78,13 @@ function HomePage() {
             </div>
           ))}
         </div>
-      ) : products.length === 0 ? (
+      ) : filteredProducts.length === 0 ? (
         <div className="bg-white rounded-lg border border-gray-100 p-6 text-center text-sm text-gray-500">
-          No products available right now.
+          {searchQuery.trim() ? `No products match "${searchQuery.trim()}".` : "No products available right now."}
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-          {products.map((product, index) => {
+          {filteredProducts.map((product, index) => {
             const productId = String(product.id || product.product_id || product._id || index);
             const image = getImage(product);
             const price = formatPrice(product.price ?? product.amount ?? product.selling_price ?? 0);
