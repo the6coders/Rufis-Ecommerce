@@ -40,18 +40,26 @@ function Dashboard() {
         setProducts(loadedProducts);
         setUsers(loadedUsers);
 
-        const firstUserId =
-          loadedUsers[0]?.id || loadedUsers[0]?.user_id || loadedUsers[0]?._id;
+        const userIds = loadedUsers
+          .map((user) => user?.id || user?.user_id || user?._id)
+          .filter(Boolean)
+          .map((id) => String(id));
 
-        if (!firstUserId) {
+        if (userIds.length === 0) {
           setCart([]);
           return;
         }
 
         try {
-          const cartRes = await getCart(firstUserId);
-          const loadedCart = extractList(cartRes.data);
-          setCart(loadedCart);
+          const cartResponses = await Promise.allSettled(
+            userIds.map((userId) => getCart(userId))
+          );
+
+          const mergedCartItems = cartResponses
+            .filter((result) => result.status === "fulfilled")
+            .flatMap((result) => extractList(result.value.data));
+
+          setCart(mergedCartItems);
         } catch {
           setCart([]);
         }
