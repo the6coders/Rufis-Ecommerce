@@ -93,6 +93,9 @@ export const getCart = async (userId) =>
 
 export const addToCart = async (cartData) => await api.post("/carts", cartData);
 
+export const removeFromCart = async (userId, productId) =>
+  await api.post("/carts", { user_id: userId, product_id: productId, quantity: 0 });
+
 export const checkoutCart = async (checkoutData) => await api.post("/carts/checkout", checkoutData);
 
 // 🔹 GET USERS

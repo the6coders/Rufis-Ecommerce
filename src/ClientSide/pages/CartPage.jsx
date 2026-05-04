@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaStar } from "react-icons/fa6";
-import { DEFAULT_MERCHANT_ID, extractList, extractObject, getCart, getProductById, getProducts } from "../../api/services";
+import { DEFAULT_MERCHANT_ID, extractList, extractObject, getCart, getProductById, getProducts, removeFromCart } from "../../api/services";
 
 function CartPage() {
   const navigate = useNavigate();
@@ -10,6 +10,7 @@ function CartPage() {
   const [loadingCart, setLoadingCart] = useState(false);
   const [loadingSimilar, setLoadingSimilar] = useState(false);
   const [error, setError] = useState("");
+  const [removingIds, setRemovingIds] = useState(new Set());
 
   const parseNonNegativeNumber = (value) => {
     const cleaned = String(value ?? "").replace(/[^0-9.-]/g, "");
@@ -85,6 +86,7 @@ function CartPage() {
             quantity: productEntry?.quantity ?? entry?.quantity,
             amount: productEntry?.amount ?? entry?.amount,
             _cartCompositeId: `${entry?.id || entry?._id || "cart"}-${productIndex}`,
+            _parentCartId: entry?.id || entry?._id || "",
           });
         });
         return;
@@ -145,6 +147,7 @@ function CartPage() {
 
     return {
       id,
+      cartId: item?._parentCartId || item?.id || item?._id || "",
       title,
       brand,
       image,
@@ -240,6 +243,24 @@ function CartPage() {
     loadSimilar();
   }, []);
 
+  const handleRemove = async (item) => {
+    const userId = localStorage.getItem("user_id") || localStorage.getItem("client_user_id") || "";
+    if (!userId || !item.productId) return;
+    setRemovingIds((prev) => new Set([...prev, item.id]));
+    try {
+      await removeFromCart(userId, item.productId);
+      setCartItems((prev) => prev.filter((c) => c.id !== item.id));
+    } catch {
+      // silently keep item on failure
+    } finally {
+      setRemovingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(item.id);
+        return next;
+      });
+    }
+  };
+
   const totals = useMemo(() => {
     const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const mrp = cartItems.reduce((sum, item) => sum + Math.round(item.price * 1.22) * item.quantity, 0);
@@ -324,6 +345,14 @@ function CartPage() {
                       </div>
 
                       <p className="mt-1 text-xs text-gray-500">Qty: {item.quantity}</p>
+                      <button
+                        type="button"
+                        onClick={() => handleRemove(item)}
+                        disabled={removingIds.has(item.id)}
+                        className="mt-2 text-xs font-semibold text-red-500 hover:text-red-700 disabled:opacity-50 transition-colors"
+                      >
+                        {removingIds.has(item.id) ? "Removing…" : "Remove"}
+                      </button>
                     </div>
                   </div>
                 </article>
