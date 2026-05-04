@@ -75,10 +75,11 @@ function Categories() {
         <div className="w-full sm:w-auto">
           <label className="block text-sm mb-1">Merchant ID</label>
           <input
-            className="border rounded px-3 py-2 w-full sm:min-w-64"
+            className="border rounded px-3 py-2 w-full sm:min-w-64 bg-gray-100 text-gray-600 cursor-not-allowed"
             value={merchantId}
-            onChange={(event) => setMerchantId(event.target.value)}
-            placeholder="Enter merchant id"
+            readOnly
+            aria-readonly="true"
+            title="Merchant ID is locked"
           />
         </div>
 
