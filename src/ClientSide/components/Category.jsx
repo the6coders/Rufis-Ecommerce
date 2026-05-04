@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { DEFAULT_MERCHANT_ID, extractList, getCategories } from "../../api/services";
+import { DEFAULT_MERCHANT_ID, extractList, getCategories, sortCategoriesForDisplay } from "../../api/services";
 
 function Categories() {
     const [categories, setCategories] = useState([]);
@@ -54,7 +54,7 @@ function Categories() {
                     }
                 }
 
-                setCategories(categoryList);
+                setCategories(sortCategoriesForDisplay(categoryList));
             } catch {
                 setCategories([]);
             }

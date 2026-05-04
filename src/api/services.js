@@ -47,6 +47,20 @@ export const extractObject = (responseData) => {
   return responseData;
 };
 
+export const sortCategoriesForDisplay = (categories) => {
+  const list = Array.isArray(categories) ? [...categories] : [];
+
+  return list.sort((left, right) => {
+    const leftName = String(left?.name || "").trim().toLowerCase();
+    const rightName = String(right?.name || "").trim().toLowerCase();
+
+    if (leftName === "for you" && rightName !== "for you") return -1;
+    if (rightName === "for you" && leftName !== "for you") return 1;
+
+    return leftName.localeCompare(rightName);
+  });
+};
+
 // 🔹 CREATE MERCHANT (run once if needed)
 export const createMerchant = async (merchantData) => await api.post("/merchants", merchantData);
 

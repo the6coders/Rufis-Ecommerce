@@ -5,6 +5,7 @@ import {
     extractList,
     getCategories,
     getProducts,
+    sortCategoriesForDisplay,
 } from "../../api/services";
 import Footer from "../components/footer";
 
@@ -57,11 +58,13 @@ function AllCategories() {
                     }
                 }
 
-                setCategories(list);
+                const sortedList = sortCategoriesForDisplay(list);
 
-                if (list.length > 0) {
+                setCategories(sortedList);
+
+                if (sortedList.length > 0) {
                     const firstCategoryId = String(
-                        list[0].id || list[0].category_id || list[0]._id || ""
+                        sortedList[0].id || sortedList[0].category_id || sortedList[0]._id || ""
                     );
                     setSelectedCategoryId((prev) => prev || firstCategoryId);
                 }
