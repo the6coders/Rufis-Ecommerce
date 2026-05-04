@@ -75,7 +75,7 @@ function Dashboard() {
   return (
     <div className="space-y-4">
       <h1 className="text-xl sm:text-2xl font-bold">Dashboard</h1>
-      <p className="text-sm text-gray-500 mb-5">Merchant ID: {merchantId || "N/A"}</p>
+      <p className="text-sm text-gray-500 mb-5">Merchant ID: {(merchantId || "N/A").slice(0, 8)}.......</p>
 
       {error ? (
         <p className="mb-5 rounded bg-red-100 text-red-700 px-3 py-2">{error}</p>
