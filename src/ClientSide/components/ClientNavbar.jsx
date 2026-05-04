@@ -10,37 +10,44 @@ function ClientNavbar() {
   const { searchQuery, setSearchQuery } = useContext(DataContent);
   const [showTopBar, setShowTopBar] = useState(true);
   const lastScrollYRef = useRef(0);
-  const tickingRef = useRef(false);
+  const toggleAnchorYRef = useRef(0);
+  const showTopBarRef = useRef(true);
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    lastScrollYRef.current = window.scrollY;
+    showTopBarRef.current = showTopBar;
+  }, [showTopBar]);
 
-    const updateNavbar = () => {
+  useEffect(() => {
+    lastScrollYRef.current = window.scrollY;
+    toggleAnchorYRef.current = window.scrollY;
+
+    const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      const isScrollingDown = currentScrollY > lastScrollYRef.current + 8;
-      const isScrollingUp = currentScrollY < lastScrollYRef.current - 8;
+      const scrollingDown = currentScrollY > lastScrollYRef.current;
+      const scrollingUp = currentScrollY < lastScrollYRef.current;
+      const isVisible = showTopBarRef.current;
 
       if (currentScrollY <= 24) {
-        setShowTopBar(true);
-      } else if (isScrollingDown) {
+        if (!isVisible) {
+          setShowTopBar(true);
+          showTopBarRef.current = true;
+        }
+        toggleAnchorYRef.current = currentScrollY;
+      } else if (isVisible && scrollingDown && currentScrollY - toggleAnchorYRef.current > 72) {
         setShowTopBar(false);
-      } else if (isScrollingUp) {
+        showTopBarRef.current = false;
+        toggleAnchorYRef.current = currentScrollY;
+      } else if (!isVisible && scrollingUp && toggleAnchorYRef.current - currentScrollY > 36) {
         setShowTopBar(true);
+        showTopBarRef.current = true;
+        toggleAnchorYRef.current = currentScrollY;
+      } else if (!isVisible && scrollingDown) {
+        toggleAnchorYRef.current = currentScrollY;
       }
 
       lastScrollYRef.current = currentScrollY;
-      tickingRef.current = false;
-    };
-
-    const handleScroll = () => {
-      if (tickingRef.current) {
-        return;
-      }
-
-      tickingRef.current = true;
-      window.requestAnimationFrame(updateNavbar);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -63,18 +70,18 @@ function ClientNavbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50">
-      <div className="bg-linear-to-b from-blue-300 via-blue-100 to-transparent px-4 pt-3 transition-[padding] duration-300">
-        <div className={`max-w-7xl mx-auto overflow-hidden transition-all duration-300 ${showTopBar ? "max-h-48 opacity-100 translate-y-0 pb-3" : "max-h-0 opacity-0 -translate-y-full pb-0"}`}>
-          <div className="flex items-center justify-center gap-3 sm:gap-10">
-            <Link to="/" className="text-xl font-bold text-blue-700">
-              <img src={flipkartLogo} alt="Flipkart Logo" className="h-12 rounded-xl w-auto bg-amber-200 px-6 sm:px-10" />
-            </Link>
-            <Link to="/" className="flex items-center gap-2 h-12 rounded-xl w-auto bg-white px-5 sm:px-10 text-xl font-bold text-blue-700">
-              <img src={airplaneLogo} alt="Airplane Logo" className="h-8 w-auto" />
-              <span>Travel</span>
-            </Link>
-          </div>
+    <header className="sticky top-0 z-50 bg-linear-to-b from-blue-300 via-blue-100 to-white/95 backdrop-blur-sm shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 pt-3">
+        <div className={`overflow-hidden transition-all duration-300 ease-out ${showTopBar ? "max-h-48 opacity-100 pb-3" : "max-h-0 opacity-0 pb-0 pointer-events-none"}`}>
+            <div className="flex items-center justify-center gap-3 sm:gap-10">
+              <Link to="/" className="text-xl font-bold text-blue-700">
+                <img src={flipkartLogo} alt="Flipkart Logo" className="h-12 rounded-xl w-auto bg-amber-200 px-6 sm:px-10" />
+              </Link>
+              <Link to="/" className="flex items-center gap-2 h-12 rounded-xl w-auto bg-white px-5 sm:px-10 text-xl font-bold text-blue-700">
+                <img src={airplaneLogo} alt="Airplane Logo" className="h-8 w-auto" />
+                <span>Travel</span>
+              </Link>
+            </div>
 
           <nav className="mt-4 flex items-center gap-4 text-sm font-medium">
             <li className="list-none flex flex-wrap justify-center gap-2 items-center text-center w-full">
@@ -85,7 +92,7 @@ function ClientNavbar() {
           </nav>
         </div>
 
-        <section className="max-w-7xl mx-auto sticky top-1 z-10 pb-2">
+        <section className="pb-2">
           <div className="rounded-2xl border border-blue-500 bg-white px-5 py-2 flex items-center gap-2 shadow-sm">
             <CiSearch className="text-blue-600 font-bold text-2xl" />
             <input
