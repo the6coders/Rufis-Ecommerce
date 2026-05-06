@@ -17,13 +17,45 @@ const navItems = [
 function Footer() {
     const [cartLength, setCartLength] = useState(0);
 
+    const resolveProductId = (value) => {
+        if (!value) return "";
+        if (typeof value === "object") {
+            return String(value.id || value.product_id || value._id || "");
+        }
+        return String(value);
+    };
+
+    const parsePositiveQuantity = (value) => {
+        const parsed = Number(value);
+        if (!Number.isFinite(parsed) || parsed <= 0) return 0;
+        return Math.floor(parsed);
+    };
+
     const countCartItems = (entries) => {
         return entries.reduce((total, entry) => {
             if (Array.isArray(entry?.products) && entry.products.length > 0) {
-                return total + entry.products.reduce((innerTotal, product) => innerTotal + Math.max(1, Number(product?.quantity || 1)), 0);
+                const nestedCount = entry.products.reduce((innerTotal, product) => {
+                    const productId = resolveProductId(product?.product_id || product?.id || product?._id || "");
+                    const quantity = parsePositiveQuantity(product?.quantity);
+                    if (!productId || quantity <= 0) return innerTotal;
+                    return innerTotal + quantity;
+                }, 0);
+
+                return total + nestedCount;
             }
 
-            return total + Math.max(1, Number(entry?.quantity || 1));
+            const productId = resolveProductId(
+                entry?.product_id ||
+                entry?.productId ||
+                entry?.product?.id ||
+                entry?.product?.product_id ||
+                entry?.product?._id ||
+                ""
+            );
+            const quantity = parsePositiveQuantity(entry?.quantity);
+
+            if (!productId || quantity <= 0) return total;
+            return total + quantity;
         }, 0);
     };
 
