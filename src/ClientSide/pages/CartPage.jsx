@@ -255,6 +255,7 @@ function CartPage() {
     try {
       await removeFromCart(userId, item.productId);
       setCartItems((prev) => prev.filter((c) => c.id !== item.id));
+      window.dispatchEvent(new Event("cart-updated"));
     } catch {
       // silently keep item on failure
     } finally {

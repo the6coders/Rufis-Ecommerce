@@ -63,9 +63,11 @@ function ProductDetailsPage() {
     const resolvedProductId = product?.id || product?.product_id || product?._id || productId;
 
     if (!userId) {
-      setStatus("Set a user ID in localStorage (key: user_id) before adding to cart.");
+      setStatus("you will need to login first before you can continue to add to cart");
       return;
     }
+
+    
 
     setAddingToCart(true);
     setStatus("");
@@ -76,6 +78,7 @@ function ProductDetailsPage() {
         product_id: resolvedProductId,
         quantity,
       });
+      window.dispatchEvent(new Event("cart-updated"));
       setStatus("Added to cart successfully.");
     } catch (err) {
       const apiMessage =
@@ -216,7 +219,7 @@ function ProductDetailsPage() {
               Buy now
             </button>
 
-            {status ? <p className="text-xs mt-3 text-gray-600">{status}</p> : null}
+            {status ? <p className="text-xs text-center px-5 mt-3 text-gray-600">{status}</p> : null}
           </aside>
         </div>
       </div>
