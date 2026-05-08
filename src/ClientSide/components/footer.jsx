@@ -28,7 +28,9 @@ function Footer() {
         try {
             const response = await getCart(userId);
             const cartData = extractList(response.data);
-            setCartLength(Array.isArray(cartData) ? cartData.length : 0);
+            const products = cartData?.[0]?.products || [];
+            setCartLength(Array.isArray(products) ? products.length : 0);
+            console.log("Cart data:", products);
         } catch {
             setCartLength(0);
         }
