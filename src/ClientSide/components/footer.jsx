@@ -17,48 +17,6 @@ const navItems = [
 function Footer() {
     const [cartLength, setCartLength] = useState(0);
 
-    const resolveProductId = (value) => {
-        if (!value) return "";
-        if (typeof value === "object") {
-            return String(value.id || value.product_id || value._id || "");
-        }
-        return String(value);
-    };
-
-    const parsePositiveQuantity = (value) => {
-        const parsed = Number(value);
-        if (!Number.isFinite(parsed) || parsed <= 0) return 0;
-        return Math.floor(parsed);
-    };
-
-    const countCartItems = (entries) => {
-        return entries.reduce((total, entry) => {
-            if (Array.isArray(entry?.products) && entry.products.length > 0) {
-                const nestedCount = entry.products.reduce((innerTotal, product) => {
-                    const productId = resolveProductId(product?.product_id || product?.id || product?._id || "");
-                    const quantity = parsePositiveQuantity(product?.quantity);
-                    if (!productId || quantity <= 0) return innerTotal;
-                    return innerTotal + quantity;
-                }, 0);
-
-                return total + nestedCount;
-            }
-
-            const productId = resolveProductId(
-                entry?.product_id ||
-                entry?.productId ||
-                entry?.product?.id ||
-                entry?.product?.product_id ||
-                entry?.product?._id ||
-                ""
-            );
-            const quantity = parsePositiveQuantity(entry?.quantity);
-
-            if (!productId || quantity <= 0) return total;
-            return total + quantity;
-        }, 0);
-    };
-
     const fetchCartCount = useCallback(async () => {
         const userId = localStorage.getItem("user_id") || localStorage.getItem("client_user_id") || "";
 
@@ -70,7 +28,7 @@ function Footer() {
         try {
             const response = await getCart(userId);
             const cartData = extractList(response.data);
-            setCartLength(countCartItems(cartData));
+            setCartLength(Array.isArray(cartData) ? cartData.length : 0);
         } catch {
             setCartLength(0);
         }
